@@ -6,6 +6,7 @@ import java.util.Objects;
 import org.apache.commons.lang3.StringUtils;
 
 import csw.assignment.json.xml.converter.constants.FileType;
+import csw.assignment.json.xml.converter.exception.ConversionRuntimeException;
 import csw.assignment.json.xml.converter.factory.ConverterFactory;
 import csw.assignment.json.xml.converter.service.JsonXmlConverter;
 
@@ -61,7 +62,10 @@ public class JsonToXmlConversionApp {
 	private void run() {
 
 		JsonXmlConverter converter = ConverterFactory.createXMLJSONConverter();
-		converter.convertJsontoXml(jsonFile, xmlFile);
+		boolean success = converter.convertJsontoXml(jsonFile, xmlFile);
+		if (!success) {
+			throw new ConversionRuntimeException("");
+		}
 
 	}
 

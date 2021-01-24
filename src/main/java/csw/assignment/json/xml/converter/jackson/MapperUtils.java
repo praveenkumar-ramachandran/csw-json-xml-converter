@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper.Builder;
 
+import csw.assignment.json.xml.converter.exception.ConversionRuntimeException;
 import csw.assignment.json.xml.converter.jackson.xml.CustomXmlModules;
 import lombok.extern.slf4j.Slf4j;
 
@@ -88,7 +89,7 @@ public class MapperUtils {
 		} catch (JsonProcessingException exception) {
 			log.error("Unable to produce JSON from {}, reason : {}",
 				value, exception.getMessage());
-			return Optional.empty();
+			throw new ConversionRuntimeException(exception);
 		}
 	}
 
@@ -104,7 +105,7 @@ public class MapperUtils {
 		} catch (IOException exception) {
 			log.error("Unable to produce JSON Node from {}, reason : {}",
 				jsonFile, exception.getMessage());
-			return Optional.empty();
+			throw new ConversionRuntimeException(exception);
 		}
 	}
 
@@ -120,7 +121,7 @@ public class MapperUtils {
 		} catch (IOException exception) {
 			log.error("Unable to produce JSON Node from {}, reason : {}",
 				jsonFile, exception.getMessage());
-			return Optional.empty();
+			throw new ConversionRuntimeException(exception);
 		}
 	}
 
@@ -139,7 +140,7 @@ public class MapperUtils {
 			} catch (IOException exception) {
 				log.error("Unable to produce XML from JSON Node {}, reason : {}",
 					jsonNode, exception.getMessage());
-				return false;
+				throw new ConversionRuntimeException(exception);
 			}
 		}).orElse(false);
 	}

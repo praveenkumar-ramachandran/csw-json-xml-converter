@@ -6,7 +6,10 @@ import java.io.File;
 import java.nio.file.Paths;
 
 import org.apache.commons.lang3.StringUtils;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.xmlunit.builder.DiffBuilder;
 import org.xmlunit.builder.Input;
 import org.xmlunit.diff.DefaultComparisonFormatter;
@@ -21,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
  * @author praveen_kumar_nr
  */
 @Slf4j
+@TestMethodOrder(OrderAnnotation.class)
 class JsonToXmlConversionAppTest {
 
 	private static final String RESOURCE_DIR;
@@ -36,11 +40,13 @@ class JsonToXmlConversionAppTest {
 	}
 
 	@Test
+	@Order(1)
 	void testNull() throws Exception {
 		convertAndcompare("null");
 	}
 
 	@Test
+	@Order(2)
 	void testInteger() throws Exception {
 		convertAndcompare("integer1");
 		convertAndcompare("integer2");
@@ -49,30 +55,35 @@ class JsonToXmlConversionAppTest {
 	}
 
 	@Test
+	@Order(3)
 	void testDouble() throws Exception {
 		convertAndcompare("double1");
 		convertAndcompare("double2");
 	}
 
 	@Test
+	@Order(4)
 	void testBigDecimal() throws Exception {
 		convertAndcompare("big-decimal1");
 		convertAndcompare("big-decimal2");
 	}
 
 	@Test
+	@Order(5)
 	void testString() throws Exception {
 		convertAndcompare("string1");
 		convertAndcompare("string2");
 	}
 
 	@Test
+	@Order(6)
 	void testBoolean() throws Exception {
 		convertAndcompare("boolean1");
 		convertAndcompare("boolean2");
 	}
 
 	@Test
+	@Order(7)
 	void testArray() throws Exception {
 		convertAndcompare("array1");
 		convertAndcompare("array2");
