@@ -1,4 +1,7 @@
-package csw.assignment.json.xml.converter;
+package csw.assignment.json.xml.converter.factory;
+
+import csw.assignment.json.xml.converter.service.DefaultJsonXmlConverter;
+import csw.assignment.json.xml.converter.service.JsonXmlConverter;
 
 /**
  * A factory for creating Converter objects.
@@ -19,8 +22,8 @@ public class ConverterFactory {
 	 *
 	 * @return the XMLJSON converter
 	 */
-	public static XMLJSONConverter createXMLJSONConverter() {
-		return new DefaultXMLJSONConverter();
+	public static JsonXmlConverter createXMLJSONConverter() {
+		return new DefaultJsonXmlConverter();
 	}
 
 }

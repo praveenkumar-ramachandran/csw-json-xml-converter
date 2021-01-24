@@ -1,4 +1,4 @@
-package csw.assignment.json.xml.converter.json;
+package csw.assignment.json.xml.converter.jackson;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,7 +15,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper.Builder;
 
-import csw.assignment.json.xml.converter.json.xml.CustomXmlModules;
+import csw.assignment.json.xml.converter.jackson.xml.CustomXmlModules;
 import lombok.extern.slf4j.Slf4j;
 
 

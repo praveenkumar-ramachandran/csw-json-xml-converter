@@ -1,4 +1,4 @@
-package csw.assignment.json.xml.converter;
+package csw.assignment.json.xml.converter.service;
 
 import java.io.File;
 
@@ -8,7 +8,7 @@ import java.io.File;
  *
  * @author praveen_kumar_nr
  */
-public interface XMLJSONConverter {
+public interface JsonXmlConverter {
 
 	/**
 	 * Convert JSO nto XML.
@@ -17,6 +17,6 @@ public interface XMLJSONConverter {
 	 * @param xmlFile  the xml file
 	 * @return true, if successful
 	 */
-	boolean convertJSONtoXML(File jsonFile, File xmlFile);
+	boolean convertJsontoXml(File jsonFile, File xmlFile);
 
 }

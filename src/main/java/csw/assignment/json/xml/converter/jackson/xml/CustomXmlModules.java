@@ -1,4 +1,4 @@
-package csw.assignment.json.xml.converter.json.xml;
+package csw.assignment.json.xml.converter.jackson.xml;
 
 import java.io.IOException;
 import java.math.BigDecimal;

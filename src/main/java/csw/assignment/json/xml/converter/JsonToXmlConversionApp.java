@@ -6,6 +6,8 @@ import java.util.Objects;
 import org.apache.commons.lang3.StringUtils;
 
 import csw.assignment.json.xml.converter.constants.FileType;
+import csw.assignment.json.xml.converter.factory.ConverterFactory;
+import csw.assignment.json.xml.converter.service.JsonXmlConverter;
 
 
 /**
@@ -58,8 +60,8 @@ public class JsonToXmlConversionApp {
 	 */
 	private void run() {
 
-		XMLJSONConverter converter = ConverterFactory.createXMLJSONConverter();
-		converter.convertJSONtoXML(jsonFile, xmlFile);
+		JsonXmlConverter converter = ConverterFactory.createXMLJSONConverter();
+		converter.convertJsontoXml(jsonFile, xmlFile);
 
 	}
 
