@@ -51,11 +51,10 @@ class NumericNodeSerializer extends AbsCustomSerializer<NumericNode> {
 
 	@Override
 	protected void writeValue(NumericNode value,
-		ToXmlGenerator xmlGenerator, SerializerProvider provider)
+		ToXmlGenerator xmlGenerator,
+		SerializerProvider provider)
 		throws IOException {
-		xmlGenerator.writeString(
-			new BigDecimal(value.asText())
-				.toPlainString());
+		xmlGenerator.writeString(toString(value));
 	}
 
 	@Override
@@ -64,9 +63,23 @@ class NumericNodeSerializer extends AbsCustomSerializer<NumericNode> {
 		ToXmlGenerator xmlGenerator,
 		SerializerProvider provider)
 		throws XMLStreamException, IOException {
-		xmlWriter.writeCharacters(
-			new BigDecimal(value.asText())
-				.toPlainString());
+		xmlWriter.writeCharacters(toString(value));
+	}
+
+	/**
+	 * To string.
+	 *
+	 * @param value the value
+	 * @return the string
+	 */
+	private String toString(NumericNode value) {
+		if (value.isFloatingPointNumber()) {
+			return new BigDecimal(value.asText())
+				.setScale(6)
+				.toPlainString();
+		}
+		return new BigDecimal(value.asText())
+			.toPlainString();
 	}
 
 }
