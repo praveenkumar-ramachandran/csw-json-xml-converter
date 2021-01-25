@@ -1,1 +1,4 @@
-<array><number>1</number><string>test</string></array>
+<array>
+  <number>1</number>
+  <string>test</string>
+</array>

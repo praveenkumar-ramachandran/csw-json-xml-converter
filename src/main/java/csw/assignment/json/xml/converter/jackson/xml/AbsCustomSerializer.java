@@ -2,6 +2,7 @@ package csw.assignment.json.xml.converter.jackson.xml;
 
 import java.io.IOException;
 
+import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamException;
 
 import org.codehaus.stax2.XMLStreamWriter2;
@@ -11,9 +12,6 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.fasterxml.jackson.dataformat.xml.ser.ToXmlGenerator;
 
-import csw.assignment.json.xml.converter.exception.ConversionRuntimeException;
-import lombok.extern.slf4j.Slf4j;
-
 
 /**
  * The Base Class for Custom Serializer.
@@ -21,12 +19,14 @@ import lombok.extern.slf4j.Slf4j;
  * @author praveen_kumar_nr
  * @param <T> the generic type
  */
-@Slf4j
 abstract class AbsCustomSerializer<T> extends StdSerializer<T>
 	implements ICustomSerializer<T> {
 
 	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = 1L;
+
+	/** The q name. */
+	private final QName qName;
 
 	/**
 	 * Instantiates a new abs custom serializer.
@@ -35,6 +35,7 @@ abstract class AbsCustomSerializer<T> extends StdSerializer<T>
 	 */
 	protected AbsCustomSerializer(Class<T> type) {
 		super(type);
+		this.qName = new QName(getTagName());
 	}
 
 	/**
@@ -43,7 +44,7 @@ abstract class AbsCustomSerializer<T> extends StdSerializer<T>
 	 * @return the serializer
 	 */
 	@Override
-	public StdSerializer<T> getSerializer() {
+	public StdSerializer<T> getStdSerializer() {
 		return this;
 	}
 
@@ -57,48 +58,63 @@ abstract class AbsCustomSerializer<T> extends StdSerializer<T>
 		return handledType();
 	}
 
+	@Override
+	public AbsCustomSerializer<T> getCustomSerializer() {
+		return this;
+	}
+
+	@Override
+	public QName getQName() {
+		return this.qName;
+	}
+
 	/**
 	 * Serialize.
 	 *
-	 * @param value    the value
-	 * @param gen      the gen
-	 * @param provider the provider
+	 * @param value     the value
+	 * @param generator the gen
+	 * @param provider  the provider
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	@Override
-	public void serialize(T value, JsonGenerator gen, SerializerProvider provider)
+	public void serialize(T value, JsonGenerator generator, SerializerProvider provider)
 		throws IOException {
 		if (value == null) {
-			gen.writeNull();
+			generator.writeNull();
 			return;
 		}
-		ToXmlGenerator generator = (ToXmlGenerator)gen;
-		try {
-			XMLStreamWriter2 writer = (XMLStreamWriter2)generator.getStaxWriter();
-			writer.writeStartElement(getTagName());
-			writeValue(writer, value, generator, provider);
-			writer.writeEndElement();
-		} catch (XMLStreamException exception) {
-			String message = "Exception in " + getSerializerName()
-				+ ", " + exception.getMessage();
-			log.error(message);
-			throw new ConversionRuntimeException(message, exception);
-		}
+		ToXmlGenerator xmlGenerator = (ToXmlGenerator)generator;
+		xmlGenerator.setNextName(this.getQName());
+		writeValue(value, xmlGenerator, provider);
 	}
+
+	/**
+	 * Write value based on the implementation.
+	 *
+	 * @param value        the value
+	 * @param xmlGenerator the xml generator
+	 * @param provider     the provider
+	 * @throws IOException Signals that an I/O exception has
+	 *                     occurred.
+	 */
+	protected abstract void writeValue(T value,
+		ToXmlGenerator xmlGenerator, SerializerProvider provider)
+		throws IOException;
 
 	/**
 	 * Write value.
 	 *
-	 * @param writer    the writer
-	 * @param value     the value
-	 * @param generator the generator
-	 * @param provider  the provider
+	 * @param value        the value
+	 * @param xmlWriter    the xml writer
+	 * @param xmlGenerator the xml generator
+	 * @param provider     the provider
+	 * @throws IOException        Signals that an I/O exception has occurred.
 	 * @throws XMLStreamException the XML stream exception
-	 * @throws IOException        Signals that an I/O exception has
-	 *                            occurred.
 	 */
-	protected abstract void writeValue(XMLStreamWriter2 writer, T value,
-		ToXmlGenerator generator, SerializerProvider provider)
-		throws XMLStreamException, IOException;
+	protected abstract void writeValue(T value,
+		XMLStreamWriter2 xmlWriter,
+		ToXmlGenerator xmlGenerator,
+		SerializerProvider provider)
+		throws IOException, XMLStreamException;
 
 }

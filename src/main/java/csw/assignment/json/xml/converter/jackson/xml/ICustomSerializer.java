@@ -1,6 +1,9 @@
 package csw.assignment.json.xml.converter.jackson.xml;
 
+import javax.xml.namespace.QName;
+
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+
 
 /**
  * The Base Interface for Custom Serializer.
@@ -25,11 +28,11 @@ interface ICustomSerializer<T> {
 	String getTagName();
 
 	/**
-	 * Gets the serializer.
+	 * Gets the std serializer.
 	 *
-	 * @return the serializer
+	 * @return the std serializer
 	 */
-	StdSerializer<T> getSerializer();
+	StdSerializer<T> getStdSerializer();
 
 	/**
 	 * Gets the target type.
@@ -37,5 +40,19 @@ interface ICustomSerializer<T> {
 	 * @return the target type
 	 */
 	Class<T> getTargetType();
+
+	/**
+	 * Gets the custom serializer.
+	 *
+	 * @return the custom serializer
+	 */
+	AbsCustomSerializer<T> getCustomSerializer();
+
+	/**
+	 * Gets the {@link QName} for this Serializer.
+	 *
+	 * @return the q name
+	 */
+	QName getQName();
 
 }

@@ -1,5 +1,7 @@
 package csw.assignment.json.xml.converter.jackson.xml;
 
+import java.io.IOException;
+
 import javax.xml.stream.XMLStreamException;
 
 import org.codehaus.stax2.XMLStreamWriter2;
@@ -7,6 +9,7 @@ import org.codehaus.stax2.XMLStreamWriter2;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.node.TextNode;
 import com.fasterxml.jackson.dataformat.xml.ser.ToXmlGenerator;
+
 
 /**
  * The Customized Serializer for {@link TextNode}.
@@ -45,20 +48,20 @@ class TextNodeSerializer extends AbsCustomSerializer<TextNode> {
 		return "string";
 	}
 
-	/**
-	 * Write value.
-	 *
-	 * @param writer    the writer
-	 * @param value     the value
-	 * @param generator the generator
-	 * @param provider  the provider
-	 * @throws XMLStreamException the XML stream exception
-	 */
 	@Override
-	protected void writeValue(XMLStreamWriter2 writer, TextNode value,
-		ToXmlGenerator generator, SerializerProvider provider)
-		throws XMLStreamException {
-		writer.writeCharacters(value.asText());
+	protected void writeValue(TextNode value,
+		ToXmlGenerator xmlGenerator, SerializerProvider provider)
+		throws IOException {
+		xmlGenerator.writeString(value.asText());
+	}
+
+	@Override
+	protected void writeValue(TextNode value,
+		XMLStreamWriter2 xmlWriter,
+		ToXmlGenerator xmlGenerator,
+		SerializerProvider provider)
+		throws XMLStreamException, IOException {
+		xmlWriter.writeCharacters(value.asText());
 	}
 
 }

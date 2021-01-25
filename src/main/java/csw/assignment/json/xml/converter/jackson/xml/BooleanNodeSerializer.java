@@ -1,5 +1,7 @@
 package csw.assignment.json.xml.converter.jackson.xml;
 
+import java.io.IOException;
+
 import javax.xml.stream.XMLStreamException;
 
 import org.codehaus.stax2.XMLStreamWriter2;
@@ -7,6 +9,7 @@ import org.codehaus.stax2.XMLStreamWriter2;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.node.BooleanNode;
 import com.fasterxml.jackson.dataformat.xml.ser.ToXmlGenerator;
+
 
 /**
  * The Customized Serializer for {@link BooleanNode}.
@@ -45,20 +48,20 @@ class BooleanNodeSerializer extends AbsCustomSerializer<BooleanNode> {
 		return "boolean";
 	}
 
-	/**
-	 * Write value.
-	 *
-	 * @param writer    the writer
-	 * @param value     the value
-	 * @param generator the generator
-	 * @param provider  the provider
-	 * @throws XMLStreamException the XML stream exception
-	 */
 	@Override
-	protected void writeValue(XMLStreamWriter2 writer, BooleanNode value,
-		ToXmlGenerator generator, SerializerProvider provider)
-		throws XMLStreamException {
-		writer.writeBoolean(value.asBoolean());
+	protected void writeValue(BooleanNode value,
+		ToXmlGenerator xmlGenerator, SerializerProvider provider)
+		throws IOException {
+		xmlGenerator.writeBoolean(value.asBoolean());
+	}
+
+	@Override
+	protected void writeValue(BooleanNode value,
+		XMLStreamWriter2 xmlWriter,
+		ToXmlGenerator xmlGenerator,
+		SerializerProvider provider)
+		throws IOException, XMLStreamException {
+		xmlWriter.writeBoolean(value.asBoolean());
 	}
 
 }

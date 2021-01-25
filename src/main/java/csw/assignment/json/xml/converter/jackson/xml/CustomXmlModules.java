@@ -1,12 +1,12 @@
 package csw.assignment.json.xml.converter.jackson.xml;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
-import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
+
+import csw.assignment.json.xml.converter.exception.ConversionRuntimeException;
 
 
 /**
@@ -19,6 +19,15 @@ public class CustomXmlModules {
 	/** The Constant MAP. */
 	private static final Map<Class<?>, ICustomSerializer<?>> MAP = new HashMap<>();
 
+	private static final JacksonXmlModule JACKSON_XML_MODULE;
+
+	static {
+		JacksonXmlModule xmlModule = new JacksonXmlModule();
+		xmlModule.setDefaultUseWrapper(false);
+		// SimpleModule xmlModule = new SimpleModule();
+		JACKSON_XML_MODULE = xmlModule;
+	}
+
 	/**
 	 * Register.
 	 *
@@ -27,44 +36,22 @@ public class CustomXmlModules {
 	 */
 	private static <T> void register(ICustomSerializer<T> customSerializer) {
 		MAP.put(customSerializer.getTargetType(), customSerializer);
+		JACKSON_XML_MODULE.addSerializer(customSerializer.getStdSerializer());
 	}
 
 	/**
-	 * New simple module.
+	 * Gets the custom module.
 	 *
-	 * @param <T>              the generic type
-	 * @param customSerializer the custom serializer
-	 * @return the simple module
+	 * @return the custom module
 	 */
-	private static <T> SimpleModule newSimpleModule(ICustomSerializer<T> customSerializer) {
-		return new SimpleModule(getModuleName(customSerializer))
-			.addSerializer(customSerializer.getSerializer());
-	}
-
-	/**
-	 * Gets the module name.
-	 *
-	 * @return the module name
-	 */
-	private static <T> String getModuleName(ICustomSerializer<T> customSerializer) {
-		return "CustomXmlModules." + customSerializer.getSerializerName();
-	}
-
-	/**
-	 * Gets the custom modules.
-	 *
-	 * @return the custom modules
-	 */
-	public static List<SimpleModule> getCustomModules() {
+	public static JacksonXmlModule getCustomModule() {
 		register(new NullNodeSerializer());
 		register(new NumericNodeSerializer());
 		register(new TextNodeSerializer());
 		register(new BooleanNodeSerializer());
 		register(new ArrayNodeSerializer());
 		register(new ObjectNodeSerializer());
-		return MAP.values().stream()
-			.map(serializer -> newSimpleModule(serializer))
-			.collect(Collectors.toList());
+		return JACKSON_XML_MODULE;
 	}
 
 	/**
@@ -79,7 +66,26 @@ public class CustomXmlModules {
 		return MAP.entrySet().stream()
 			.filter(entry -> entry.getKey().isAssignableFrom(type))
 			.findFirst()
-			.map(customSer -> (ICustomSerializer<T>)customSer);
+			.map(entry -> (ICustomSerializer<T>)entry.getValue());
+	}
+
+	/**
+	 * Gets the custom serializer or throw.
+	 *
+	 * @param <T>  the generic type
+	 * @param type the type
+	 * @return the custom serializer or throw
+	 */
+	static <T> AbsCustomSerializer<T> getCustomSerializerOrThrow(Class<T> type) {
+		Optional<ICustomSerializer<T>> customSerializer = CustomXmlModules
+			.getCustomSerializer(type);
+		if (customSerializer.isEmpty()) {
+			throw new ConversionRuntimeException(
+				"Serializer not found for type=" + type);
+		}
+		return customSerializer
+			.get()
+			.getCustomSerializer();
 	}
 
 }

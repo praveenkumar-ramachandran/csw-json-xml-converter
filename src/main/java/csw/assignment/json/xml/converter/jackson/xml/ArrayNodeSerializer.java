@@ -11,11 +11,16 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.dataformat.xml.ser.ToXmlGenerator;
 
+import csw.assignment.json.xml.converter.exception.ConversionRuntimeException;
+import lombok.extern.log4j.Log4j2;
+
+
 /**
  * The Customized Serializer for {@link ArrayNode}.
  * 
  * @author praveen_kumar_nr
  */
+@Log4j2
 class ArrayNodeSerializer extends AbsCustomSerializer<ArrayNode> {
 
 	/** The Constant serialVersionUID. */
@@ -48,24 +53,35 @@ class ArrayNodeSerializer extends AbsCustomSerializer<ArrayNode> {
 		return "array";
 	}
 
-	/**
-	 * Write value.
-	 *
-	 * @param writer    the writer
-	 * @param value     the value
-	 * @param generator the generator
-	 * @param provider  the provider
-	 * @throws XMLStreamException the XML stream exception
-	 * @throws IOException        Signals that an I/O exception has
-	 *                            occurred.
-	 */
 	@Override
-	protected void writeValue(XMLStreamWriter2 writer, ArrayNode value,
-		ToXmlGenerator generator, SerializerProvider provider)
-		throws XMLStreamException, IOException {
-		for (JsonNode jsonNode : value) {
-			generator.writeObject(jsonNode);
+	protected void writeValue(ArrayNode value,
+		ToXmlGenerator xmlGenerator, SerializerProvider provider)
+		throws IOException {
+		try {
+			XMLStreamWriter2 xmlWriter = (XMLStreamWriter2)xmlGenerator
+				.getStaxWriter();
+			writeValue(value, xmlWriter, xmlGenerator, provider);
+		} catch (XMLStreamException exception) {
+			String message = "Exception in " + getSerializerName()
+				+ ", " + exception.getMessage();
+			log.error(message);
+			throw new ConversionRuntimeException(message, exception);
 		}
+	}
+
+	@Override
+	protected void writeValue(ArrayNode value,
+		XMLStreamWriter2 xmlWriter,
+		ToXmlGenerator xmlGenerator,
+		SerializerProvider provider)
+		throws IOException, XMLStreamException {
+		xmlWriter.writeStartElement(getTagName());
+		for (JsonNode jsonNode : value) {
+			// provider.findValueSerializer(jsonNode.getClass())
+			// .serialize(jsonNode, xmlGenerator, provider);
+			xmlGenerator.writeObject(jsonNode);
+		}
+		xmlWriter.writeEndElement();
 	}
 
 }

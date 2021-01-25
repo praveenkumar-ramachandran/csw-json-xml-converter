@@ -16,14 +16,14 @@ import org.xmlunit.diff.DefaultComparisonFormatter;
 import org.xmlunit.diff.Diff;
 
 import csw.assignment.json.xml.converter.constants.FileType;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 
 
 /**
  *
  * @author praveen_kumar_nr
  */
-@Slf4j
+@Log4j2
 @TestMethodOrder(OrderAnnotation.class)
 class JsonToXmlConversionAppTest {
 
@@ -51,7 +51,6 @@ class JsonToXmlConversionAppTest {
 		convertAndcompare("integer1");
 		convertAndcompare("integer2");
 		convertAndcompare("number");
-		convertAndcompare("number-nested");
 	}
 
 	@Test
@@ -91,6 +90,12 @@ class JsonToXmlConversionAppTest {
 		convertAndcompare("array4");
 	}
 
+	@Test
+	@Order(8)
+	void testObject() throws Exception {
+		convertAndcompare("number-nested");
+	}
+
 	private void convertAndcompare(String fileName) throws Exception {
 		String[] args = {
 			getJsonFile(fileName).getAbsolutePath(),
@@ -100,8 +105,6 @@ class JsonToXmlConversionAppTest {
 		Diff diff = DiffBuilder
 			.compare(Input.fromFile(getXmlFile(fileName)))
 			.withTest(Input.fromFile(getSampleXmlFile(fileName)))
-			// FIXME : is it okay to generate without indentation
-			.ignoreWhitespace()
 			.build();
 		if (diff.hasDifferences()) {
 			log.error(diff.toString(new DefaultComparisonFormatter()));
