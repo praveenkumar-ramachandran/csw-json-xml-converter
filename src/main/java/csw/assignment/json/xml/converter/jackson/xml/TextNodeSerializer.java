@@ -58,7 +58,6 @@ class TextNodeSerializer extends AbsCustomSerializer<TextNode> {
 	@Override
 	protected void writeValue(TextNode value,
 		XMLStreamWriter2 xmlWriter,
-		ToXmlGenerator xmlGenerator,
 		SerializerProvider provider)
 		throws XMLStreamException, IOException {
 		xmlWriter.writeCharacters(value.asText());

@@ -24,7 +24,6 @@ public class CustomXmlModules {
 	static {
 		JacksonXmlModule xmlModule = new JacksonXmlModule();
 		xmlModule.setDefaultUseWrapper(false);
-		// SimpleModule xmlModule = new SimpleModule();
 		JACKSON_XML_MODULE = xmlModule;
 	}
 

@@ -49,6 +49,12 @@ class JsonToXmlConversionAppTest {
 			convertAndcompare("null");
 		}
 
+		@Test
+		@Order(001)
+		void testNullNested() throws Exception {
+			convertAndcompare("null-nested");
+		}
+
 	}
 
 	@Nested
@@ -173,12 +179,18 @@ class JsonToXmlConversionAppTest {
 
 		@Test
 		@Order(504)
+		void testArray4() throws Exception {
+			convertAndcompare("array4");
+		}
+
+		@Test
+		@Order(520)
 		void testArraySingle() throws Exception {
 			convertAndcompare("array-single");
 		}
 
 		@Test
-		@Order(504)
+		@Order(530)
 		void testArrayNested() throws Exception {
 			convertAndcompare("array-nested");
 		}
@@ -191,7 +203,7 @@ class JsonToXmlConversionAppTest {
 		@Test
 		@Order(601)
 		void testObject() throws Exception {
-			// convertAndcompare("object");
+			convertAndcompare("object");
 		}
 
 	}

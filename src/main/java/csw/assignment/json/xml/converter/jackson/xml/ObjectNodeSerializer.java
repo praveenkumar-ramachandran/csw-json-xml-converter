@@ -64,7 +64,9 @@ class ObjectNodeSerializer extends AbsCustomSerializer<ObjectNode> {
 		try {
 			XMLStreamWriter2 xmlWriter = (XMLStreamWriter2)xmlGenerator
 				.getStaxWriter();
-			writeValue(value, xmlWriter, xmlGenerator, provider);
+			xmlWriter.writeStartElement(getTagName());
+			writeValue(value, xmlWriter, provider);
+			xmlWriter.writeEndElement();
 		} catch (XMLStreamException exception) {
 			String message = "Exception in " + getSerializerName()
 				+ ", " + exception.getMessage();
@@ -76,56 +78,43 @@ class ObjectNodeSerializer extends AbsCustomSerializer<ObjectNode> {
 	@Override
 	protected void writeValue(ObjectNode value,
 		XMLStreamWriter2 xmlWriter,
-		ToXmlGenerator xmlGenerator,
 		SerializerProvider provider)
 		throws IOException, XMLStreamException {
-		xmlWriter.writeStartElement(getTagName());
 		Iterator<Entry<String, JsonNode>> fields = value.fields();
 		while (fields.hasNext()) {
 			Entry<String, JsonNode> field = fields.next();
 			JsonNode jsonNode = field.getValue();
 			String attributeName = field.getKey();
-			if (jsonNode != null) {
-				serializeType(jsonNode.getClass(),
-					attributeName, jsonNode,
-					xmlWriter, xmlGenerator, provider);
-			} else {
-				xmlGenerator.writeNullField(attributeName);
-			}
+			writeValueByType(jsonNode.getClass(),
+				attributeName, jsonNode,
+				xmlWriter, provider);
 		}
-		xmlWriter.writeEndElement();
 	}
 
 	/**
-	 * Serialize type.
+	 * Write value by type.
 	 *
 	 * @param <T>            the generic type
 	 * @param type           the type
 	 * @param attributeValue the attribute value
-	 * @param value          the value
+	 * @param jsonNode       the json node
 	 * @param xmlWriter      the xml writer
-	 * @param xmlGenerator   the xml generator
 	 * @param provider       the provider
 	 * @throws IOException        Signals that an I/O exception has occurred.
 	 * @throws XMLStreamException the XML stream exception
 	 */
 	@SuppressWarnings("unchecked")
-	private <T> void serializeType(Class<T> type,
-		String attributeValue, JsonNode value,
-		XMLStreamWriter2 xmlWriter, ToXmlGenerator xmlGenerator,
+	private <T> void writeValueByType(Class<T> type,
+		String attributeValue, JsonNode jsonNode,
+		XMLStreamWriter2 xmlWriter,
 		SerializerProvider provider)
 		throws IOException, XMLStreamException {
 		AbsCustomSerializer<T> serializer = CustomXmlModules
 			.getCustomSerializerOrThrow(type);
-		xmlGenerator.setNextName(serializer.getQName());
-		xmlGenerator.writeStartObject();
-		xmlGenerator.setNextIsAttribute(true);
-		xmlGenerator.writeFieldName(ATTRIBUTE_NAME);
-		xmlGenerator.writeString(attributeValue);
-		serializer.writeValue((T)value, xmlWriter,
-			xmlGenerator, provider);
-		xmlGenerator.setNextIsAttribute(false);
-		xmlGenerator.writeEndObject();
+		xmlWriter.writeStartElement(serializer.getTagName());
+		xmlWriter.writeAttribute(ATTRIBUTE_NAME, attributeValue);
+		serializer.writeValue((T)jsonNode, xmlWriter, provider);
+		xmlWriter.writeEndElement();
 	}
 
 }

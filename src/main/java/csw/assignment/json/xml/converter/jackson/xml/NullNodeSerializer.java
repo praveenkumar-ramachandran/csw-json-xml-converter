@@ -58,7 +58,6 @@ class NullNodeSerializer extends AbsCustomSerializer<NullNode> {
 	@Override
 	protected void writeValue(NullNode value,
 		XMLStreamWriter2 xmlWriter,
-		ToXmlGenerator xmlGenerator,
 		SerializerProvider provider)
 		throws IOException, XMLStreamException {
 		// do nothing

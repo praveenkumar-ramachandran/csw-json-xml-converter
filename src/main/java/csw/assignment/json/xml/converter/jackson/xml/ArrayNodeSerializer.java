@@ -61,7 +61,7 @@ class ArrayNodeSerializer extends AbsCustomSerializer<ArrayNode> {
 			XMLStreamWriter2 xmlWriter = (XMLStreamWriter2)xmlGenerator
 				.getStaxWriter();
 			xmlWriter.writeStartElement(getTagName());
-			writeValue(value, xmlWriter, xmlGenerator, provider);
+			writeValue(value, xmlWriter, provider);
 			xmlWriter.writeEndElement();
 		} catch (XMLStreamException exception) {
 			String message = "Exception in " + getSerializerName()
@@ -74,17 +74,16 @@ class ArrayNodeSerializer extends AbsCustomSerializer<ArrayNode> {
 	@Override
 	protected void writeValue(ArrayNode value,
 		XMLStreamWriter2 xmlWriter,
-		ToXmlGenerator xmlGenerator,
 		SerializerProvider provider)
 		throws IOException, XMLStreamException {
 		for (JsonNode jsonNode : value) {
-			serializeType(jsonNode.getClass(), jsonNode,
-				xmlWriter, xmlGenerator, provider);
+			writeValueByType(jsonNode.getClass(), jsonNode,
+				xmlWriter, provider);
 		}
 	}
 
 	/**
-	 * Serialize type.
+	 * Write value by type.
 	 *
 	 * @param <T>          the generic type
 	 * @param type         the type
@@ -96,16 +95,15 @@ class ArrayNodeSerializer extends AbsCustomSerializer<ArrayNode> {
 	 * @throws XMLStreamException the XML stream exception
 	 */
 	@SuppressWarnings("unchecked")
-	private <T> void serializeType(Class<T> type, JsonNode jsonNode,
-		XMLStreamWriter2 xmlWriter, ToXmlGenerator xmlGenerator,
+	private <T> void writeValueByType(Class<T> type,
+		JsonNode jsonNode, XMLStreamWriter2 xmlWriter,
 		SerializerProvider provider)
 		throws IOException, XMLStreamException {
 		AbsCustomSerializer<T> serializer = CustomXmlModules
 			.getCustomSerializerOrThrow(type);
-		xmlGenerator.setNextName(serializer.getQName());
 		xmlWriter.writeStartElement(serializer.getTagName());
 		serializer.writeValue((T)jsonNode,
-			xmlWriter, xmlGenerator, provider);
+			xmlWriter, provider);
 		xmlWriter.writeEndElement();
 	}
 

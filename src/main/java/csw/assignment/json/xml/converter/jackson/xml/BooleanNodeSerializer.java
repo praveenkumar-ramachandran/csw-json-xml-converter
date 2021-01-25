@@ -58,7 +58,6 @@ class BooleanNodeSerializer extends AbsCustomSerializer<BooleanNode> {
 	@Override
 	protected void writeValue(BooleanNode value,
 		XMLStreamWriter2 xmlWriter,
-		ToXmlGenerator xmlGenerator,
 		SerializerProvider provider)
 		throws IOException, XMLStreamException {
 		xmlWriter.writeBoolean(value.asBoolean());

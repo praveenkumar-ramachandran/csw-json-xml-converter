@@ -60,7 +60,6 @@ class NumericNodeSerializer extends AbsCustomSerializer<NumericNode> {
 	@Override
 	protected void writeValue(NumericNode value,
 		XMLStreamWriter2 xmlWriter,
-		ToXmlGenerator xmlGenerator,
 		SerializerProvider provider)
 		throws XMLStreamException, IOException {
 		xmlWriter.writeCharacters(toString(value));

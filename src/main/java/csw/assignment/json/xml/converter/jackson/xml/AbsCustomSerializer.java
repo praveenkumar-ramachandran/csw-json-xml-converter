@@ -104,16 +104,14 @@ abstract class AbsCustomSerializer<T> extends StdSerializer<T>
 	/**
 	 * Write value.
 	 *
-	 * @param value        the value
-	 * @param xmlWriter    the xml writer
-	 * @param xmlGenerator the xml generator
-	 * @param provider     the provider
+	 * @param value     the value
+	 * @param xmlWriter the xml writer
+	 * @param provider  the provider
 	 * @throws IOException        Signals that an I/O exception has occurred.
 	 * @throws XMLStreamException the XML stream exception
 	 */
 	protected abstract void writeValue(T value,
 		XMLStreamWriter2 xmlWriter,
-		ToXmlGenerator xmlGenerator,
 		SerializerProvider provider)
 		throws IOException, XMLStreamException;
 
