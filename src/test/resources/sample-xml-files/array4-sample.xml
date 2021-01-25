@@ -1,4 +1,15 @@
 <array>
-	<number>1</number>
-	<string>test</string>
+  <array>
+    <string>duck</string>
+    <string>hen</string>
+  </array>
+  <array>
+    <string>peacock</string>
+  </array>
+  <array>
+    <string>crow</string>
+  </array>
+  <array>
+    <string>parrot</string>
+  </array>
 </array>

@@ -11,12 +11,11 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper.Builder;
 
+import csw.assignment.json.xml.converter.exception.ConversionRuntimeException;
 import csw.assignment.json.xml.converter.jackson.xml.CustomXmlModules;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 
 
 /**
@@ -24,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
  *
  * @author praveen_kumar_nr
  */
-@Slf4j
+@Log4j2
 public class MapperUtils {
 
 	/** The Constant OBJECT_MAPPER. */
@@ -34,19 +33,36 @@ public class MapperUtils {
 	private static final XmlMapper XML_MAPPER;
 
 	static {
+
+		// System.setProperty(DOMImplementationRegistry.PROPERTY,
+		// "com.sun.org.apache.xerces.internal.dom.DOMImplementationSourceImpl");
+
 		// json mapper
 		OBJECT_MAPPER = new ObjectMapper();
 		OBJECT_MAPPER.enable(JsonGenerator.Feature.WRITE_BIGDECIMAL_AS_PLAIN);
 		OBJECT_MAPPER.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 		OBJECT_MAPPER.enable(SerializationFeature.INDENT_OUTPUT);
+
 		// xml mapper
-		Builder builder = XmlMapper.builder()
-			.defaultUseWrapper(false)
-			.enable(SerializationFeature.INDENT_OUTPUT);
-		for (SimpleModule module : CustomXmlModules.getCustomModules()) {
-			builder.addModule(module);
-		}
-		XML_MAPPER = builder.build();
+		// Builder builder = XmlMapper.builder()
+		// .defaultUseWrapper(false)
+		// .enable(SerializationFeature.INDENT_OUTPUT)
+		// .configure(SerializationFeature.INDENT_OUTPUT, true)
+		// .addModule(CustomXmlModules.getCustomModule());
+		// XML_MAPPER = builder.build();
+
+		// XMLInputFactory inputFactory = new WstxInputFactory();
+		// inputFactory.setProperty(WstxInputProperties.P_MAX_ATTRIBUTE_SIZE,
+		// 32000);
+		// XMLOutputFactory outputFactory = new WstxOutputFactory();
+		// outputFactory.setProperty(WstxOutputProperties.P_OUTPUT_CDATA_AS_TEXT,
+		// true);
+		// XmlFactory xmlFactory = new XmlFactory(inputFactory, outputFactory);
+		// XML_MAPPER = new XmlMapper(xmlFactory,
+		// CustomXmlModules.getCustomModule());
+
+		XML_MAPPER = new XmlMapper(CustomXmlModules.getCustomModule());
+		// XML_MAPPER.configure(SerializationFeature.INDENT_OUTPUT, true);
 	}
 
 	/**
@@ -88,7 +104,7 @@ public class MapperUtils {
 		} catch (JsonProcessingException exception) {
 			log.error("Unable to produce JSON from {}, reason : {}",
 				value, exception.getMessage());
-			return Optional.empty();
+			throw new ConversionRuntimeException(exception);
 		}
 	}
 
@@ -104,7 +120,7 @@ public class MapperUtils {
 		} catch (IOException exception) {
 			log.error("Unable to produce JSON Node from {}, reason : {}",
 				jsonFile, exception.getMessage());
-			return Optional.empty();
+			throw new ConversionRuntimeException(exception);
 		}
 	}
 
@@ -120,7 +136,7 @@ public class MapperUtils {
 		} catch (IOException exception) {
 			log.error("Unable to produce JSON Node from {}, reason : {}",
 				jsonFile, exception.getMessage());
-			return Optional.empty();
+			throw new ConversionRuntimeException(exception);
 		}
 	}
 
@@ -139,9 +155,27 @@ public class MapperUtils {
 			} catch (IOException exception) {
 				log.error("Unable to produce XML from JSON Node {}, reason : {}",
 					jsonNode, exception.getMessage());
-				return false;
+				throw new ConversionRuntimeException(exception);
 			}
 		}).orElse(false);
+	}
+
+	/**
+	 * To xml.
+	 *
+	 * @param jsonFile the json file
+	 * @return the optional
+	 */
+	public Optional<String> toXml(File jsonFile) {
+		return toJsonNode(jsonFile).map(jsonNode -> {
+			try {
+				return XML_MAPPER.writeValueAsString(jsonNode);
+			} catch (IOException exception) {
+				log.error("Unable to produce XML from JSON Node {}, reason : {}",
+					jsonNode, exception.getMessage());
+				throw new ConversionRuntimeException(exception);
+			}
+		});
 	}
 
 }

@@ -1,1 +1,4 @@
-<object><number>2</number><number>10</number></object>
+<object>
+  <number name="cars">2</number>
+  <number name="trucks">10</number>
+</object>
