@@ -60,7 +60,9 @@ class ArrayNodeSerializer extends AbsCustomSerializer<ArrayNode> {
 		try {
 			XMLStreamWriter2 xmlWriter = (XMLStreamWriter2)xmlGenerator
 				.getStaxWriter();
+			xmlWriter.writeStartElement(getTagName());
 			writeValue(value, xmlWriter, xmlGenerator, provider);
+			xmlWriter.writeEndElement();
 		} catch (XMLStreamException exception) {
 			String message = "Exception in " + getSerializerName()
 				+ ", " + exception.getMessage();
@@ -75,12 +77,35 @@ class ArrayNodeSerializer extends AbsCustomSerializer<ArrayNode> {
 		ToXmlGenerator xmlGenerator,
 		SerializerProvider provider)
 		throws IOException, XMLStreamException {
-		xmlWriter.writeStartElement(getTagName());
 		for (JsonNode jsonNode : value) {
-			// provider.findValueSerializer(jsonNode.getClass())
-			// .serialize(jsonNode, xmlGenerator, provider);
-			xmlGenerator.writeObject(jsonNode);
+			serializeType(jsonNode.getClass(), jsonNode,
+				xmlWriter, xmlGenerator, provider);
 		}
+	}
+
+	/**
+	 * Serialize type.
+	 *
+	 * @param <T>          the generic type
+	 * @param type         the type
+	 * @param jsonNode     the json node
+	 * @param xmlWriter    the xml writer
+	 * @param xmlGenerator the xml generator
+	 * @param provider     the provider
+	 * @throws IOException        Signals that an I/O exception has occurred.
+	 * @throws XMLStreamException the XML stream exception
+	 */
+	@SuppressWarnings("unchecked")
+	private <T> void serializeType(Class<T> type, JsonNode jsonNode,
+		XMLStreamWriter2 xmlWriter, ToXmlGenerator xmlGenerator,
+		SerializerProvider provider)
+		throws IOException, XMLStreamException {
+		AbsCustomSerializer<T> serializer = CustomXmlModules
+			.getCustomSerializerOrThrow(type);
+		xmlGenerator.setNextName(serializer.getQName());
+		xmlWriter.writeStartElement(serializer.getTagName());
+		serializer.writeValue((T)jsonNode,
+			xmlWriter, xmlGenerator, provider);
 		xmlWriter.writeEndElement();
 	}
 

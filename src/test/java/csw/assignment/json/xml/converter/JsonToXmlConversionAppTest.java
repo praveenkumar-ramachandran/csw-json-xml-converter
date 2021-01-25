@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
@@ -39,61 +40,160 @@ class JsonToXmlConversionAppTest {
 			.toAbsolutePath().toString();
 	}
 
-	@Test
-	@Order(1)
-	void testNull() throws Exception {
-		convertAndcompare("null");
+	@Nested
+	class NullTypesTest {
+
+		@Test
+		@Order(001)
+		void testNull() throws Exception {
+			convertAndcompare("null");
+		}
+
 	}
 
-	@Test
-	@Order(2)
-	void testInteger() throws Exception {
-		convertAndcompare("integer1");
-		convertAndcompare("integer2");
-		convertAndcompare("number");
+	@Nested
+	class NumericTypesTest {
+
+		@Test
+		@Order(201)
+		void testInteger1() throws Exception {
+			convertAndcompare("integer1");
+		}
+
+		@Test
+		@Order(202)
+		void testInteger2() throws Exception {
+			convertAndcompare("integer2");
+		}
+
+		@Test
+		@Order(211)
+		void testNumber() throws Exception {
+			convertAndcompare("number");
+		}
+
+		@Test
+		@Order(212)
+		void testNumberNested() throws Exception {
+			convertAndcompare("number-nested");
+		}
+
+		@Test
+		@Order(221)
+		void testDouble1() throws Exception {
+			convertAndcompare("double1");
+		}
+
+		@Test
+		@Order(222)
+		void testDouble2() throws Exception {
+			convertAndcompare("double2");
+		}
+
+		@Test
+		@Order(231)
+		void testBigDecimal1() throws Exception {
+			convertAndcompare("big-decimal1");
+		}
+
+		@Test
+		@Order(232)
+		void testBigDecimal2() throws Exception {
+			convertAndcompare("big-decimal2");
+		}
+
 	}
 
-	@Test
-	@Order(3)
-	void testDouble() throws Exception {
-		convertAndcompare("double1");
-		convertAndcompare("double2");
+	@Nested
+	class StringTypesTest {
+
+		@Test
+		@Order(301)
+		void testString1() throws Exception {
+			convertAndcompare("string1");
+		}
+
+		@Test
+		@Order(302)
+		void testString2() throws Exception {
+			convertAndcompare("string2");
+		}
+
+		@Test
+		@Order(303)
+		void testStringNested() throws Exception {
+			convertAndcompare("string-nested");
+		}
+
 	}
 
-	@Test
-	@Order(4)
-	void testBigDecimal() throws Exception {
-		convertAndcompare("big-decimal1");
-		convertAndcompare("big-decimal2");
+	@Nested
+	class BooleanTypesTest {
+
+		@Test
+		@Order(401)
+		void testBoolean1() throws Exception {
+			convertAndcompare("boolean1");
+		}
+
+		@Test
+		@Order(402)
+		void testBoolean() throws Exception {
+			convertAndcompare("boolean2");
+		}
+
+		@Test
+		@Order(403)
+		void testBooleanNested() throws Exception {
+			convertAndcompare("boolean-nested");
+		}
+
 	}
 
-	@Test
-	@Order(5)
-	void testString() throws Exception {
-		convertAndcompare("string1");
-		convertAndcompare("string2");
+	@Nested
+	class ArrayTypesTest {
+
+		@Test
+		@Order(501)
+		void testArray1() throws Exception {
+			convertAndcompare("array1");
+		}
+
+		@Test
+		@Order(502)
+		void testArray2() throws Exception {
+			convertAndcompare("array2");
+		}
+
+		@Test
+		@Order(503)
+		void testArray3() throws Exception {
+			convertAndcompare("array3");
+		}
+
+		@Test
+		@Order(504)
+		void testArraySingle() throws Exception {
+			convertAndcompare("array-single");
+		}
+
+		@Test
+		@Order(504)
+		void testArrayNested() throws Exception {
+			convertAndcompare("array-nested");
+		}
+
 	}
 
-	@Test
-	@Order(6)
-	void testBoolean() throws Exception {
-		convertAndcompare("boolean1");
-		convertAndcompare("boolean2");
-	}
+	@Nested
+	class ObjectTypesTest {
 
-	@Test
-	@Order(7)
-	void testArray() throws Exception {
-		convertAndcompare("array1");
-		convertAndcompare("array2");
-		convertAndcompare("array3");
-		convertAndcompare("array4");
-	}
+		@Test
+		@Order(601)
+		void testObject() throws Exception {
+			// convertAndcompare("object");
+		}
 
-	@Test
-	@Order(8)
-	void testObject() throws Exception {
-		convertAndcompare("number-nested");
 	}
 
 	private void convertAndcompare(String fileName) throws Exception {
