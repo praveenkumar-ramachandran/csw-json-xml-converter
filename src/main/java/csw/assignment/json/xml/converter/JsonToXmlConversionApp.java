@@ -2,7 +2,6 @@ package csw.assignment.json.xml.converter;
 
 import java.io.File;
 import java.util.Arrays;
-import java.util.Objects;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -36,8 +35,16 @@ public class JsonToXmlConversionApp {
 	 * @param xmlFilePath  the xml file path
 	 */
 	private JsonToXmlConversionApp(String jsonFilePath, String xmlFilePath) {
-		Objects.requireNonNull(jsonFilePath, "JSON file path is Required..!!");
-		Objects.requireNonNull(xmlFilePath, "XML file path is Required..!!");
+		if (StringUtils.isEmpty(jsonFilePath)) {
+			throw new IllegalArgumentException(
+				"JSON file path is Required, but provided : "
+					+ jsonFilePath);
+		}
+		if (StringUtils.isEmpty(xmlFilePath)) {
+			throw new IllegalArgumentException(
+				"XML file path is Required, but provided : "
+					+ xmlFilePath);
+		}
 		this.jsonFile = getFile(jsonFilePath, FileType.JSON);
 		this.xmlFile = getFile(xmlFilePath, FileType.XML);
 		this.converter = ConverterFactory.createXMLJSONConverter();
@@ -77,6 +84,7 @@ public class JsonToXmlConversionApp {
 			log.info("*****************************************");
 			log.info("**** FAILED  : JsonToXmlConversionApp");
 			log.info("*****************************************");
+			throw exception;
 		}
 	}
 
@@ -106,21 +114,22 @@ public class JsonToXmlConversionApp {
 	 */
 	private static File getFile(String filePath, FileType fileType) {
 		File file = new File(filePath);
-		if (FileType.XML.equals(fileType)) {
-			return file;
+		if (!file.exists() && !file.isDirectory() && !file.isFile()) {
+			throw new IllegalArgumentException(
+				"Invalid file path : " + filePath);
 		}
-		if (!file.exists()) {
+		if (FileType.JSON.equals(fileType) && !file.exists()) {
 			throw new IllegalArgumentException("File does not exists : " + filePath);
 		}
-		if (!file.getPath().endsWith(fileType.getExtension())) {
+		if (FileType.JSON.equals(fileType) && !file.isFile()) {
+			throw new IllegalArgumentException(
+				"Expected a file but provided a directory : " + filePath);
+		}
+		if (file.isFile() && !file.getPath().endsWith(fileType.getExtension())) {
 			throw new IllegalArgumentException(
 				"Expected a file with "
 					+ fileType.getExtension()
 					+ " extension, but provided a file : " + filePath);
-		}
-		if (!file.isFile()) {
-			throw new IllegalArgumentException(
-				"Expected a file but provided a directory : " + filePath);
 		}
 		return file;
 	}

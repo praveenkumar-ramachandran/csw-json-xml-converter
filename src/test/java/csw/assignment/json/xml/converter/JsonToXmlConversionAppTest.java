@@ -1,6 +1,7 @@
 package csw.assignment.json.xml.converter;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.File;
 import java.nio.file.Paths;
@@ -41,18 +42,172 @@ class JsonToXmlConversionAppTest {
 	}
 
 	@Nested
+	class InvalidArgumentsTest {
+
+		@Test
+		@Order(001)
+		void testNullArgs() throws Exception {
+			String[] args = null;
+			convertAndAssertThrows(args);
+		}
+
+		@Test
+		@Order(002)
+		void testTwoNullArgs() throws Exception {
+			String[] args = new String[] {
+				null, null
+			};
+			convertAndAssertThrows(args);
+		}
+
+		@Test
+		@Order(03)
+		void testNullArgsAt0() throws Exception {
+			String[] args = new String[] {
+				null, getXmlFilePath("null")
+			};
+			convertAndAssertThrows(args);
+		}
+
+		@Test
+		@Order(004)
+		void testNullArgsAt1() throws Exception {
+			String[] args = new String[] {
+				getJsonFilePath("null"), null
+			};
+			convertAndAssertThrows(args);
+		}
+
+		@Test
+		@Order(011)
+		void testEmptyArgs() throws Exception {
+			String[] args = new String[] {};
+			convertAndAssertThrows(args);
+		}
+
+		@Test
+		@Order(012)
+		void testTwoEmptyArgs() throws Exception {
+			String[] args = new String[] {
+				StringUtils.EMPTY, StringUtils.EMPTY
+			};
+			convertAndAssertThrows(args);
+		}
+
+		@Test
+		@Order(013)
+		void testEmptyArgAt0() throws Exception {
+			String[] args = new String[] {
+				StringUtils.EMPTY, getXmlFilePath("null")
+			};
+			convertAndAssertThrows(args);
+		}
+
+		@Test
+		@Order(034)
+		void testEmptyArgAt1() throws Exception {
+			String[] args = new String[] {
+				getJsonFilePath("null"), StringUtils.EMPTY
+			};
+			convertAndAssertThrows(args);
+		}
+
+		@Test
+		@Order(041)
+		void testTwoInvalidFiles() throws Exception {
+			String[] args = new String[] {
+				"invalid-file-path",
+				"invalid-file-path"
+			};
+			convertAndAssertThrows(args);
+		}
+
+		@Test
+		@Order(042)
+		void testInvalidFilesAt0() throws Exception {
+			String[] args = new String[] {
+				"invalid-file-path",
+				getXmlFilePath("null")
+			};
+			convertAndAssertThrows(args);
+		}
+
+		@Test
+		@Order(043)
+		void testInvalidFilesAt1() throws Exception {
+			String[] args = new String[] {
+				getJsonFilePath("null"),
+				"invalid-file-path"
+			};
+			convertAndAssertThrows(args);
+		}
+
+		@Test
+		@Order(051)
+		void testTwoInvalidFileFormat() throws Exception {
+			String[] args = new String[] {
+				getXmlFilePath("null"),
+				getJsonFilePath("null")
+			};
+			convertAndAssertThrows(args);
+		}
+
+		@Test
+		@Order(052)
+		void testInvalidFileFormatAt0() throws Exception {
+			String[] args = new String[] {
+				getXmlFilePath("null"),
+				getXmlFilePath("null")
+			};
+			convertAndAssertThrows(args);
+		}
+
+		@Test
+		@Order(053)
+		void testInvalidFileFormatAt1() throws Exception {
+			String[] args = new String[] {
+				getJsonFilePath("null"),
+				getJsonFilePath("null")
+			};
+			convertAndAssertThrows(args);
+		}
+
+	}
+
+	@Nested
+	class ValidArgumentsTest {
+
+		@Test
+		@Order(001)
+		void testTwoArgsAsFile() throws Exception {
+			convertAndAssert("object", "object");
+		}
+
+		@Test
+		@Order(001)
+		void testArg0AsFileArg1AsDir() throws Exception {
+			String[] args = new String[] {
+				getJsonFilePath("object"),
+				getXmlFileDir("object")
+			};
+			convertAndAssert(args, "object");
+		}
+
+	}
+
+	@Nested
 	class NullTypesTest {
 
 		@Test
 		@Order(001)
 		void testNull() throws Exception {
-			convertAndcompare("null");
+			convertAndAssert("null");
 		}
 
 		@Test
 		@Order(001)
 		void testNullNested() throws Exception {
-			convertAndcompare("null-nested");
+			convertAndAssert("null-nested");
 		}
 
 	}
@@ -63,49 +218,49 @@ class JsonToXmlConversionAppTest {
 		@Test
 		@Order(201)
 		void testInteger1() throws Exception {
-			convertAndcompare("integer1");
+			convertAndAssert("integer1");
 		}
 
 		@Test
 		@Order(202)
 		void testInteger2() throws Exception {
-			convertAndcompare("integer2");
+			convertAndAssert("integer2");
 		}
 
 		@Test
 		@Order(211)
 		void testNumber() throws Exception {
-			convertAndcompare("number");
+			convertAndAssert("number");
 		}
 
 		@Test
 		@Order(212)
 		void testNumberNested() throws Exception {
-			convertAndcompare("number-nested");
+			convertAndAssert("number-nested");
 		}
 
 		@Test
 		@Order(221)
 		void testDouble1() throws Exception {
-			convertAndcompare("double1");
+			convertAndAssert("double1");
 		}
 
 		@Test
 		@Order(222)
 		void testDouble2() throws Exception {
-			convertAndcompare("double2");
+			convertAndAssert("double2");
 		}
 
 		@Test
 		@Order(231)
 		void testBigDecimal1() throws Exception {
-			convertAndcompare("big-decimal1");
+			convertAndAssert("big-decimal1");
 		}
 
 		@Test
 		@Order(232)
 		void testBigDecimal2() throws Exception {
-			convertAndcompare("big-decimal2");
+			convertAndAssert("big-decimal2");
 		}
 
 	}
@@ -116,19 +271,19 @@ class JsonToXmlConversionAppTest {
 		@Test
 		@Order(301)
 		void testString1() throws Exception {
-			convertAndcompare("string1");
+			convertAndAssert("string1");
 		}
 
 		@Test
 		@Order(302)
 		void testString2() throws Exception {
-			convertAndcompare("string2");
+			convertAndAssert("string2");
 		}
 
 		@Test
 		@Order(303)
 		void testStringNested() throws Exception {
-			convertAndcompare("string-nested");
+			convertAndAssert("string-nested");
 		}
 
 	}
@@ -139,19 +294,19 @@ class JsonToXmlConversionAppTest {
 		@Test
 		@Order(401)
 		void testBoolean1() throws Exception {
-			convertAndcompare("boolean1");
+			convertAndAssert("boolean1");
 		}
 
 		@Test
 		@Order(402)
 		void testBoolean() throws Exception {
-			convertAndcompare("boolean2");
+			convertAndAssert("boolean2");
 		}
 
 		@Test
 		@Order(403)
 		void testBooleanNested() throws Exception {
-			convertAndcompare("boolean-nested");
+			convertAndAssert("boolean-nested");
 		}
 
 	}
@@ -162,37 +317,37 @@ class JsonToXmlConversionAppTest {
 		@Test
 		@Order(501)
 		void testArray1() throws Exception {
-			convertAndcompare("array1");
+			convertAndAssert("array1");
 		}
 
 		@Test
 		@Order(502)
 		void testArray2() throws Exception {
-			convertAndcompare("array2");
+			convertAndAssert("array2");
 		}
 
 		@Test
 		@Order(503)
 		void testArray3() throws Exception {
-			convertAndcompare("array3");
+			convertAndAssert("array3");
 		}
 
 		@Test
 		@Order(504)
 		void testArray4() throws Exception {
-			convertAndcompare("array4");
+			convertAndAssert("array4");
 		}
 
 		@Test
 		@Order(520)
 		void testArraySingle() throws Exception {
-			convertAndcompare("array-single");
+			convertAndAssert("array-single");
 		}
 
 		@Test
 		@Order(530)
 		void testArrayNested() throws Exception {
-			convertAndcompare("array-nested");
+			convertAndAssert("array-nested");
 		}
 
 	}
@@ -203,20 +358,38 @@ class JsonToXmlConversionAppTest {
 		@Test
 		@Order(601)
 		void testObject() throws Exception {
-			convertAndcompare("object");
+			convertAndAssert("object");
 		}
 
 	}
 
-	private void convertAndcompare(String fileName) throws Exception {
-		String[] args = {
-			getJsonFile(fileName).getAbsolutePath(),
-			getXmlFile(fileName).getAbsolutePath()
-		};
+	private void convertAndAssertThrows(String[] args) {
+		assertThrows(IllegalArgumentException.class,
+			() -> JsonToXmlConversionApp.main(args));
+	}
+
+	private void convertAndAssert(String fileName) {
+		convertAndAssert(fileName, fileName);
+	}
+
+	private void convertAndAssert(String jsonFileName,
+		String xmlFileName) {
+		convertAndAssert(
+			getArgs(jsonFileName, xmlFileName),
+			xmlFileName);
+	}
+
+	private void convertAndAssert(String[] args, String xmlFileName) {
+		// call to converter
 		JsonToXmlConversionApp.main(args);
+		// compare results
+		compare(xmlFileName);
+	}
+
+	private void compare(String xmlFileName) {
 		Diff diff = DiffBuilder
-			.compare(Input.fromFile(getXmlFile(fileName)))
-			.withTest(Input.fromFile(getSampleXmlFile(fileName)))
+			.compare(Input.fromFile(getXmlFile(xmlFileName)))
+			.withTest(Input.fromFile(getSampleXmlFile(xmlFileName)))
 			.build();
 		if (diff.hasDifferences()) {
 			log.error(diff.toString(new DefaultComparisonFormatter()));
@@ -224,19 +397,19 @@ class JsonToXmlConversionAppTest {
 		assertFalse(diff.hasDifferences());
 	}
 
-	private File getJsonFile(String fileName) throws Exception {
+	private File getJsonFile(String fileName) {
 		return getFile(getInputJsonFileName(fileName));
 	}
 
-	private File getXmlFile(String fileName) throws Exception {
+	private File getXmlFile(String fileName) {
 		return getFile(getOutputXmlFileName(fileName));
 	}
 
-	private File getSampleXmlFile(String fileName) throws Exception {
+	private File getSampleXmlFile(String fileName) {
 		return getFile(getSampleXmlFileName(fileName));
 	}
 
-	private File getFile(String fileName) throws Exception {
+	private File getFile(String fileName) {
 		return new File(RESOURCE_DIR + File.separator + fileName);
 	}
 
@@ -256,6 +429,26 @@ class JsonToXmlConversionAppTest {
 		return "sample-xml-files"
 			+ File.separator
 			+ FileType.XML.getFileName(fileName + "-sample");
+	}
+
+	private String[] getArgs(String jsonFileName,
+		String xmlFileName) {
+		return new String[] {
+			getJsonFilePath(jsonFileName),
+			getXmlFilePath(xmlFileName)
+		};
+	}
+
+	private String getJsonFilePath(String fileName) {
+		return getJsonFile(fileName).getAbsolutePath();
+	}
+
+	private String getXmlFilePath(String fileName) {
+		return getXmlFile(fileName).getAbsolutePath();
+	}
+
+	private String getXmlFileDir(String fileName) {
+		return getXmlFile(fileName).getParent();
 	}
 
 }
