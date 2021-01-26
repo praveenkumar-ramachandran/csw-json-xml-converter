@@ -31,12 +31,12 @@ _ARCHIVE_TYPE_ZIP="zip"
 _INPUT_JSON_FILE_PATH=$2
 _OUTPUT_XML_FILE_PATH=$3
 
-_MODE_INSTALL="INSTALL"
+_MODE_INSTALL="INSTALL" # default mode
 _MODE_UPDATE="UPDATE"
 _MODE_RUN="RUN"
 
 if [[ -z "$_MODE" ]]; then
-	_MODE="$_MODE_UPDATE"
+	_MODE="$_MODE_INSTALL"
 fi
 
 # **************************************
