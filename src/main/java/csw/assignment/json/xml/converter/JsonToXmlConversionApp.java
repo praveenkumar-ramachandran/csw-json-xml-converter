@@ -102,11 +102,11 @@ public class JsonToXmlConversionApp {
 	 */
 	private static File getFile(String filePath, FileType fileType) {
 		File file = new File(filePath);
-		if (!file.exists()) {
-			throw new IllegalArgumentException("File does not exists : " + filePath);
-		}
 		if (FileType.XML.equals(fileType)) {
 			return file;
+		}
+		if (!file.exists()) {
+			throw new IllegalArgumentException("File does not exists : " + filePath);
 		}
 		if (!file.getPath().endsWith(fileType.getExtension())) {
 			throw new IllegalArgumentException(
