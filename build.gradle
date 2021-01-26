@@ -19,6 +19,7 @@ sourceSets {
     resources {
       srcDir 'src/main/resources'
       include '**/*.properties'
+      include '**/*.xml'
     }
   }
   test {
@@ -49,10 +50,6 @@ dependencies {
   implementation 'org.codehaus.woodstox:woodstox-core-asl:4.4.1'
   implementation 'org.apache.logging.log4j:log4j-core:2.14.0'
   implementation 'org.apache.logging.log4j:log4j-slf4j-impl:2.14.0'
-  // implementation 'org.codehaus.woodstox:stax2-api:4.2.1'
-  // implementation 'xerces:xercesImpl:2.12.1'
-  // implementation 'xerces:xml-serializer:2.7.1'
-  // implementation 'org.json:json:20201115'
   // test
   testCompileOnly 'org.projectlombok:lombok:1.18.12'
   testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
@@ -63,7 +60,6 @@ dependencies {
 }
 
 configurations.all {
-  // exclude group: 'xml-apis'
   exclude group: 'javax.xml.stream', module: 'stax-api'
 }
 
@@ -83,6 +79,7 @@ shadowJar {
   zip64 true
   manifest {
      attributes 'Multi-Release': 'true'
+     attributes 'Main-Class': 'csw.assignment.json.xml.converter.JsonToXmlConversionApp'
   }
 }
 
