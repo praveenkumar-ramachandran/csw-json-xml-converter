@@ -1,6 +1,7 @@
 package csw.assignment.json.xml.converter;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Objects;
 
 import org.apache.commons.lang3.StringUtils;
@@ -53,8 +54,11 @@ public class JsonToXmlConversionApp {
 			log.info("**** STARTED : JsonToXmlConversionApp");
 			log.info("*****************************************");
 
-			if (args == null || args.length <= 0) {
-				throw new IllegalArgumentException("Missing JSON file path and XML file path..!!");
+			if (args == null || args.length < 2) {
+				throw new IllegalArgumentException(
+					"Two arguments Required :"
+						+ " [1] JSON file path, [2] XML file path..!!"
+						+ " But provided : " + Arrays.toString(args));
 			}
 
 			String jsonFilePath = StringUtils.trimToNull(args[0]);
