@@ -24,12 +24,16 @@ _GRADLE_VERSION="6.5"
 _REPO_NAMESPACE="praveenkumar-ramachandran"
 _REPO_NAME="csw-json-xml-converter"
 _BRANCH_NAME="main"
-_BUILD_VERSION="1.0.0-SNAPSHOT"
+_REPO_BUILD_VERSION="1.0.0-SNAPSHOT"
 _ARCHIVE_TYPE_TAR_GZ="tar.gz"
 _ARCHIVE_TYPE_ZIP="zip"
 
+_INPUT_JSON_FILE_PATH=$2
+_OUTPUT_XML_FILE_PATH=$3
+
 _MODE_INSTALL="INSTALL"
 _MODE_UPDATE="UPDATE"
+_MODE_RUN="RUN"
 
 if [[ -z "$_MODE" ]]; then
 	_MODE="$_MODE_UPDATE"
@@ -175,15 +179,25 @@ run_export_cmd() {
 	export PATH="$PATH:$EXPORT_VARIABLE_PATH/bin"
 }
 
-setup_based_on_mode() {
-	SRC_DIR="$_WORK_DIR"
+create_work_dir() {
+	## if mode is install, create a backup for old working directory and create a new work directory
+	WORK_DIRECTORY="$_WORK_DIR"
 	DATE_TIME="$(echo $(date '+%Y-%m-%d-%H-%M-%S'))"
-	BACKUP_DIR="$_WORK_DIR-backup-$DATE_TIME"
-	[[ "$_MODE" == "$_MODE_INSTALL" ]] && [[ -d "$SRC_DIR" ]] && mv "$SRC_DIR" "$BACKUP_DIR"
+	BACKUP_DIRECTORY="$_WORK_DIR-backup-$DATE_TIME"
+	[[ "$_MODE" == "$_MODE_INSTALL" ]] && [[ -d "$WORK_DIRECTORY" ]] && mv "$WORK_DIRECTORY" "$BACKUP_DIRECTORY"
+	run_cmd_and_exit_on_error "mkdir $WORK_DIRECTORY"
+	if [[ -d "$WORK_DIRECTORY" ]]; then
+		# parameter is empty, so skip folder rename process
+		:
+	else
+		log_failure "Work Directory not available, Run $_MODE_INSTALL mode and proceed further"
+		exit 1
+	fi
 }
 
 install_tools() {
 	if [[ "$_MODE" == "$_MODE_INSTALL" ]]; then
+		
 		## update apt-get
 		apt-get update
 		# apt_get_install jq
@@ -193,8 +207,12 @@ install_tools() {
 		apt_get_install zip
 		apt_get_install unzip
 		apt_get_install git-all
+		
+		## craete the work DIR if not exists
+		make_dir_if_not_present "$_WORK_DIR"
+
 	else
-		log_info "Skipped installing TOOLS, executing $_MODE mode"
+		log_info "Skipped installing TOOLS for $_MODE mode"
 	fi
 }
 
@@ -209,9 +227,10 @@ install_java() {
 		JDK_ARCHIVE_FILE_NAME="$JDK_ARCHIVE_FILE_NAME_PREFIX$JDK_ARCHIVE_FILE_NAME_SUFFIX"
 		JDK_DOWNLOAD_URL="https://download.java.net/java/GA/jdk$_JAVA_VERSION/205943a0976c4ed48cb16f1043c5c647/12/GPL/$JDK_ARCHIVE_FILE_NAME.tar.gz"
 		curl_install "$JDK_FILE_NAME" "$JDK_DOWNLOAD_URL" "$JDK_ARCHIVE_FILE_NAME" "$JDK_FILE_NAME" "$_ARCHIVE_TYPE_TAR_GZ" "$JDK_EXPORT_VARIABLE" ""
+		log_success "Completed installing JAVA for $_MODE mode"
 	else
 		run_export_cmd "$JDK_EXPORT_VARIABLE" "$JDK_EXPORT_VARIABLE_PATH"
-		log_info "Skipped installing JAVA, executing $_MODE mode"
+		log_info "Skipped installing JAVA for $_MODE mode"
 	fi
 }
 
@@ -224,13 +243,14 @@ install_gradle() {
 		GRADLE_ARCHIVE_FILE_NAME="gradle-$_GRADLE_VERSION-bin"
 		GRADLE_DOWNLOAD_URL="https://services.gradle.org/distributions/gradle-$_GRADLE_VERSION-bin.zip"
 		curl_install "$GRADLE_FILE_NAME" "$GRADLE_DOWNLOAD_URL" "$GRADLE_ARCHIVE_FILE_NAME" "$GRADLE_FILE_NAME" "$_ARCHIVE_TYPE_ZIP" "$GRADLE_EXPORT_VARIABLE" ""
+		log_success "Completed installing GRADLE for $_MODE mode"
 	else
 		run_export_cmd "$GRADLE_EXPORT_VARIABLE" "$GRADLE_EXPORT_VARIABLE_PATH"
-		log_info "Skipped installing GRADLE, executing $_MODE mode"
+		log_info "Skipped installing GRADLE for $_MODE mode"
 	fi
 }
 
-install_json_xml_converter() {
+install_git_repo() {
 	if [[ "$_MODE" == "$_MODE_INSTALL" ]]; then
 		## install json-xml-converter using curl
 		# https://github.com/praveenkumar-ramachandran/csw-json-xml-converter/archive/main.zip
@@ -243,16 +263,51 @@ install_json_xml_converter() {
 		# https://github.com/praveenkumar-ramachandran/csw-json-xml-converter.git
 		CLONE_URL="https://github.com/$_REPO_NAMESPACE/$_REPO_NAME.git"
 		run_cmd_and_exit_on_error "git clone $CLONE_URL" "Unable to clone From : $CLONE_URL"
-	else
+		log_success "Completed installing $_REPO_NAME for $_MODE mode"
+	elif [[ "$_MODE" == "$_MODE_UPDATE" ]]; then
 		run_cmd_and_exit_on_error "cd $_WORK_DIR/$_REPO_NAME"
 		run_cmd_and_exit_on_error "git checkout $_BRANCH_NAME"
 		run_cmd_and_exit_on_error "git pull"
+		log_success "Completed Updating $_REPO_NAME for $_MODE mode"
+	else
+		log_info "Skipped Install / Update for $_REPO_NAME for $_MODE mode"
+	fi
+}
+
+create_jar() {
+	## run gradle command
+	if [[ "$_MODE" == "$_MODE_INSTALL" || "$_MODE" == "$_MODE_UPDATE" ]]; then
+		if [[ ! -d "$_WORK_DIR/$_REPO_NAME" ]]; then
+			log_failure "Repo not available : $_REPO_NAME"
+			exit 1
+		else
+			run_cmd_and_exit_on_error "cd $_WORK_DIR/$_REPO_NAME"
+		fi
+		log_info "Building Jar for $_REPO_NAME"
+		run_cmd_and_exit_on_error "gradle clean build install publish -i" "Unable to build the jar file for : $_REPO_NAME"
+		log_success "Completed Jar Creation $_REPO_NAME for $_MODE mode"
+	else
+		log_info "Skipped Jar Creation for $_REPO_NAME for $_MODE mode"
+	fi
+}
+
+run_jar() {
+	if [[ "$_MODE" == "$_MODE_RUN" ]]; then
+		JAR_FILE_PATH="$_WORK_DIR/$_REPO_NAME/build/libs/$_REPO_NAME-$_REPO_BUILD_VERSION-all.jar"
+		if [[ -e "$JAR_FILE_PATH" ]]; then
+			run_cmd_and_exit_on_error "java -jar $JAR_FILE_PATH $_INPUT_JSON_FILE_PATH $_OUTPUT_XML_FILE_PATH"
+		else
+			log_failure "Jar file Not Found : $JAR_FILE_PATH"
+			exit 1
+		fi
+	else
+		log_info "Skipped running jar for $_REPO_NAME for $_MODE mode"
 	fi
 }
 
 log_info() {
 	MESSAGE=$1
-	echo "SUCCESS  : $MESSAGE"
+	echo "INFO     : $MESSAGE"
 }
 
 log_failure() {
@@ -262,7 +317,7 @@ log_failure() {
 
 log_success() {
 	MESSAGE=$1
-	echo "INFO     : $MESSAGE"
+	echo "SUCCESS  : $MESSAGE"
 }
 
 # **************************************
@@ -275,15 +330,11 @@ echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 log_info "Executing $_MODE mode"
 
-## setup logics based on mode
-setup_based_on_mode
+## create work directory based on mode
+create_work_dir
 
 ## install necessary packages
 install_tools
-
-## craete the work DIR if not exists
-make_dir_if_not_present "$_WORK_DIR"
-run_cmd_and_exit_on_error "cd $_WORK_DIR" "Unable to get into dorectory : $_WORK_DIR"
 
 ## install java
 install_java
@@ -292,18 +343,13 @@ install_java
 install_gradle
 
 ## install json-xml-converter
-install_json_xml_converter
+install_git_repo
 
-## run gradle command
-log_info "Building Jar for $_REPO_NAME"
-if [[ ! -d "$_WORK_DIR/$_REPO_NAME" ]]; then
-	log_failure "Repo not available : $_REPO_NAME"
-	exit 1
-else
-	run_cmd_and_exit_on_error "cd $_WORK_DIR/$_REPO_NAME"
-fi
-gradle clean build install publish -i
-stop_if_error_on_last_cmd "Unable to build the jar file for : $_REPO_NAME"
+## create jar file
+create_jar
+
+## Run the jar file with provided parameters, only on run mode
+run_jar
 
 echo "------------------------------------------------------------------------------------------------------"
 echo "END      : Successfully executed install-json-xml-converter.sh "
