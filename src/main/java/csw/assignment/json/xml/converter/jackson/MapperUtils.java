@@ -33,36 +33,14 @@ public class MapperUtils {
 	private static final XmlMapper XML_MAPPER;
 
 	static {
-
-		// System.setProperty(DOMImplementationRegistry.PROPERTY,
-		// "com.sun.org.apache.xerces.internal.dom.DOMImplementationSourceImpl");
-
 		// json mapper
 		OBJECT_MAPPER = new ObjectMapper();
 		OBJECT_MAPPER.enable(JsonGenerator.Feature.WRITE_BIGDECIMAL_AS_PLAIN);
 		OBJECT_MAPPER.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 		OBJECT_MAPPER.enable(SerializationFeature.INDENT_OUTPUT);
-
 		// xml mapper
-		// Builder builder = XmlMapper.builder()
-		// .defaultUseWrapper(false)
-		// .enable(SerializationFeature.INDENT_OUTPUT)
-		// .configure(SerializationFeature.INDENT_OUTPUT, true)
-		// .addModule(CustomXmlModules.getCustomModule());
-		// XML_MAPPER = builder.build();
-
-		// XMLInputFactory inputFactory = new WstxInputFactory();
-		// inputFactory.setProperty(WstxInputProperties.P_MAX_ATTRIBUTE_SIZE,
-		// 32000);
-		// XMLOutputFactory outputFactory = new WstxOutputFactory();
-		// outputFactory.setProperty(WstxOutputProperties.P_OUTPUT_CDATA_AS_TEXT,
-		// true);
-		// XmlFactory xmlFactory = new XmlFactory(inputFactory, outputFactory);
-		// XML_MAPPER = new XmlMapper(xmlFactory,
-		// CustomXmlModules.getCustomModule());
-
 		XML_MAPPER = new XmlMapper(CustomXmlModules.getCustomModule());
-		// XML_MAPPER.configure(SerializationFeature.INDENT_OUTPUT, true);
+		XML_MAPPER.configure(SerializationFeature.INDENT_OUTPUT, true);
 	}
 
 	/**
@@ -73,9 +51,9 @@ public class MapperUtils {
 	}
 
 	/**
-	 * Gets the single instance of MapperUtils.
+	 * Gets the singleton of MapperUtils.
 	 *
-	 * @return single instance of MapperUtils
+	 * @return singleton of MapperUtils
 	 */
 	public static MapperUtils getInstance() {
 		return MapperUtilsFactory.MAPPER_UTILS;
