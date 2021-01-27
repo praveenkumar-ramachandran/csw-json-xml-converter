@@ -95,10 +95,10 @@ public class XmlUtils {
 	 * @param xmlFile the xml file
 	 */
 	public void format(String xml, File xmlFile) {
-		try (OutputStreamWriter writer = new OutputStreamWriter(
-			new FileOutputStream(xmlFile), UTF_8)) {
-			Source xmlInput = new StreamSource(new StringReader(xml));
-			TRANSFORMER.transform(xmlInput, new StreamResult(writer));
+		try (var outputStreamWriter = new OutputStreamWriter(new FileOutputStream(xmlFile));
+			var stringReader = new StringReader(xml)) {
+			Source xmlInput = new StreamSource(stringReader);
+			TRANSFORMER.transform(xmlInput, new StreamResult(outputStreamWriter));
 		} catch (Exception exception) {
 			log.error("Unable to Format and write XML content {}"
 				+ " into {}, reason : {}",
@@ -114,10 +114,10 @@ public class XmlUtils {
 	 * @return the string
 	 */
 	public String format(String xml) {
-		try {
-			Source xmlInput = new StreamSource(new StringReader(xml));
-			StringWriter stringWriter = new StringWriter();
-			StreamResult xmlOutput = new StreamResult(stringWriter);
+		try (var reader = new StringReader(xml);
+			var writer = new StringWriter()) {
+			Source xmlInput = new StreamSource(reader);
+			StreamResult xmlOutput = new StreamResult(writer);
 			TRANSFORMER.transform(xmlInput, xmlOutput);
 			return xmlOutput.getWriter().toString();
 		} catch (Exception exception) {
@@ -151,9 +151,8 @@ public class XmlUtils {
 	 * @return the string
 	 */
 	public String formatWithLSS(String xml) {
-		try {
-			final InputSource src = new InputSource(
-				new StringReader(StringUtils.strip(xml)));
+		try (var reader = new StringReader(StringUtils.strip(xml))) {
+			final InputSource src = new InputSource(reader);
 			final Node document = DocumentBuilderFactory.newInstance()
 				.newDocumentBuilder().parse(src)
 				.getDocumentElement();
@@ -161,15 +160,15 @@ public class XmlUtils {
 			final DOMImplementationRegistry registry = DOMImplementationRegistry.newInstance();
 			final DOMImplementationLS impl = (DOMImplementationLS)registry
 				.getDOMImplementation("LS");
-			final LSSerializer writer = impl.createLSSerializer();
+			final LSSerializer serializer = impl.createLSSerializer();
 
-			DOMConfiguration domConfig = writer.getDomConfig();
+			DOMConfiguration domConfig = serializer.getDomConfig();
 			// Set this to true if the output needs to be beautified.
 			domConfig.setParameter("format-pretty-print", Boolean.TRUE);
 			// Set this to true if the declaration is needed to be generated.
 			domConfig.setParameter("xml-declaration", Boolean.FALSE);
 
-			return writer.writeToString(document);
+			return serializer.writeToString(document);
 		} catch (Exception exception) {
 			log.error("Unable to Format XML content {}, reason : {}",
 				xml, exception.getMessage());

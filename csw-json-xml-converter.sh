@@ -188,6 +188,7 @@ create_work_dir() {
 		if [[ -d "$WORK_DIRECTORY" ]]; then
 			log_info "Work Directory exists already, creating backup : $BACKUP_DIRECTORY"
 			run_cmd_and_exit_on_error "mv $WORK_DIRECTORY $BACKUP_DIRECTORY"
+			run_cmd_and_exit_on_error "mkdir $WORK_DIRECTORY"
 		else
 			log_info "Work Directory not exists, creating : $WORK_DIRECTORY"
 			run_cmd_and_exit_on_error "mkdir $WORK_DIRECTORY"
@@ -228,6 +229,7 @@ install_java() {
 	JDK_EXPORT_VARIABLE="JAVA_HOME"
 	JDK_EXPORT_VARIABLE_PATH="$_WORK_DIR/$JDK_FILE_NAME"
 	if [[ "$_MODE" == "$_MODE_INSTALL" ]]; then
+		run_cmd_and_exit_on_error "cd $_WORK_DIR"
 		# https://download.java.net/java/GA/jdk14.0.2/205943a0976c4ed48cb16f1043c5c647/12/GPL/openjdk-14.0.2_linux-x64_bin.tar.gz
 		JDK_ARCHIVE_FILE_NAME_PREFIX="openjdk-$_JAVA_VERSION"
 		JDK_ARCHIVE_FILE_NAME_SUFFIX="_linux-x64_bin"
@@ -246,6 +248,7 @@ install_gradle() {
 	GRADLE_EXPORT_VARIABLE="GRADLE_HOME"
 	GRADLE_EXPORT_VARIABLE_PATH="$_WORK_DIR/$GRADLE_FILE_NAME"
 	if [[ "$_MODE" == "$_MODE_INSTALL" ]]; then
+		run_cmd_and_exit_on_error "cd $_WORK_DIR"
 		# https://services.gradle.org/distributions/gradle-6.5-bin.zip
 		GRADLE_ARCHIVE_FILE_NAME="gradle-$_GRADLE_VERSION-bin"
 		GRADLE_DOWNLOAD_URL="https://services.gradle.org/distributions/gradle-$_GRADLE_VERSION-bin.zip"
@@ -259,6 +262,7 @@ install_gradle() {
 
 install_git_repo() {
 	if [[ "$_MODE" == "$_MODE_INSTALL" ]]; then
+		run_cmd_and_exit_on_error "cd $_WORK_DIR"
 		## install json-xml-converter using curl
 		# https://github.com/praveenkumar-ramachandran/csw-json-xml-converter/archive/main.zip
 		# _REPO_FILE_NAME="$_REPO_NAME-$_BRANCH_NAME"
