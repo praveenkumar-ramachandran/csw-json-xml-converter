@@ -35,10 +35,6 @@ _MODE_INSTALL="INSTALL" # default mode
 _MODE_UPDATE="UPDATE"
 _MODE_RUN="RUN"
 
-if [[ -z "$_MODE" ]]; then
-	_MODE="$_MODE_INSTALL"
-fi
-
 # **************************************
 # ************** Functions *************
 # **************************************
@@ -339,7 +335,18 @@ echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 echo "START    : Executing install-json-xml-converter.sh"
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 
-log_info "Executing $_MODE mode"
+if [[ -z "$_MODE" ]]; then
+	log_failure "Argument not provided for MODE...!!"
+	log_failure "Supported arguments : [ $_MODE_INSTALL, $_MODE_UPDATE, $_MODE_RUN ]"
+	exit 1
+fi
+
+if [[ "$_MODE" == "$_MODE_INSTALL" || "$_MODE" == "$_MODE_UPDATE" || "$_MODE" == "$_MODE_RUN" ]]; then
+	log_info "Executing $_MODE mode"
+else
+	log_failure "Invalid mode provided : $_MODE"
+	exit 1
+fi
 
 ## create work directory based on mode
 create_work_dir

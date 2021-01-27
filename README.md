@@ -16,7 +16,9 @@ Refer Few of the conversion samples provided below.
 #### `1.1 Single Number`
 ##### <font color="brown">JSON :</font>
 
-    -5
+```json
+-5
+```
 
 ##### <font color="green">XML  :</font>
 
@@ -27,10 +29,12 @@ Refer Few of the conversion samples provided below.
 #### `1.2 Nested Numbers`
 ##### <font color="brown">JSON :</font>
 
-    {
-		"cars": 2,
-		"trucks": 10
-	}
+```json
+{
+  "cars": 2,
+  "trucks": 10
+}
+```
 
 ##### <font color="green">XML  :</font>
 
@@ -44,7 +48,9 @@ Refer Few of the conversion samples provided below.
 #### `2.1 Single String`
 ##### <font color="brown">JSON :</font>
 
-    "Hello World"
+```json
+"Hello World"
+```
 
 ##### <font color="green">XML  :</font>
 
@@ -55,10 +61,12 @@ Refer Few of the conversion samples provided below.
 #### `2.2 Nested String`
 ##### <font color="brown">JSON :</font>
 
-    {
-		"firstName": "John",
-		"lastName": "Smith"
-	}
+```json
+{
+  "firstName": "John",
+  "lastName": "Smith"
+}
+```
 
 ##### <font color="green">XML  :</font>
 
@@ -72,7 +80,9 @@ Refer Few of the conversion samples provided below.
 #### `3.1 Single Boolean`
 ##### <font color="brown">JSON :</font>
 
-    true
+```json
+true
+```
 
 ##### <font color="green">XML  :</font>
 
@@ -83,10 +93,12 @@ Refer Few of the conversion samples provided below.
 #### `3.2 Nested Boolean`
 ##### <font color="brown">JSON :</font>
 
-    {
-		"isHuman": true,
-		"isTall": false
-	}
+```json
+{
+  "isHuman": true,
+  "isTall": false
+}
+```
 
 ##### <font color="green">XML  :</font>
 
@@ -100,7 +112,9 @@ Refer Few of the conversion samples provided below.
 #### `4.1 Single Array`
 ##### <font color="brown">JSON :</font>
 
-    [1, "test"]
+```json
+[1, "test"]
+```
 
 ##### <font color="green">XML  :</font>
 
@@ -114,9 +128,11 @@ Refer Few of the conversion samples provided below.
 #### `4.2 Nested Array`
 ##### <font color="brown">JSON :</font>
 
-    {
-		"fibs": [0,1,1,2,3,"fibs",true]
-	}
+```json
+{
+  "fibs": [0,1,1,2,3,"fibs",true]
+}
+```
 
 ##### <font color="green">XML  :</font>
 
@@ -137,20 +153,22 @@ Refer Few of the conversion samples provided below.
 #### `5. Object`
 ##### <font color="brown">JSON :</font>
 
-    {
-		"profile": {
-			"firstName": "John",
-			"lastName": "Smith",
-			"age": 20,
-			"friends": [
-				"Joe",
-				{
-					"firstName": "Sue",
-					"lastName": "Jones"
-				}
-			]
-		}
-	}
+```json
+{
+  "profile": {
+    "firstName": "John",
+    "lastName": "Smith",
+    "age": 20,
+    "friends": [
+  	  "Joe",
+  	  {
+  	    "firstName": "Sue",
+  	    "lastName": "Jones"
+  	  }
+    ]
+  }
+}
+```
 
 ##### <font color="green">XML  :</font>
 
@@ -174,7 +192,9 @@ Refer Few of the conversion samples provided below.
 #### `6.1 Single null`
 ##### <font color="brown">JSON :</font>
 
-    null
+```json
+null
+```
 
 ##### <font color="green">XML  :</font>
 
@@ -185,9 +205,11 @@ Refer Few of the conversion samples provided below.
 #### `6.2 Nested null`
 ##### <font color="brown">JSON :</font>
 
-    {
-		"computer_name": null
-	}
+```json
+{
+  "computer_name": null
+}
+```
 
 ##### <font color="green">XML  :</font>
 
@@ -228,10 +250,6 @@ In Install mode :
 To execute `Install`, use below command.
 
 	./csw-json-xml-converter.sh install
-
-It's the default mode. So you can execute without any arguments as below.
-
-	./csw-json-xml-converter.sh
 
 When Install mode is triggered again, the existing setup folder will be moved to a backup folder and a new setup will be done.
 
