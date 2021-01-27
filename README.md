@@ -219,7 +219,9 @@ null
 </object>
 ```
 
-## `How to Run [Note : Supports only on linux machines]`
+## `How to Run` 
+
+###### `[Note : Supports only on linux machines]`
 
 #### `Step 1 :`
 
@@ -233,12 +235,15 @@ Change the file to executable. To make it executable, use below command
 
 #### `Step 3 :`
 
-The `csw-json-xml-converter.sh` shell script accepts 3 different types of arguments as mentioned below :
+The `csw-json-xml-converter.sh` shell script executes in 3 modes.
 
  1. Install
  2. Update
  3. Run
- 
+
+The 1st parameter for this shell file defines the execution mode and is case in-sensitive.
+The 1st parameter supports only above 3 values.
+
 ##### `1. Install Mode`
 
 In Install mode :
@@ -247,7 +252,7 @@ In Install mode :
  - The Repo is cloned from Github.
  - The Jar file for this Repo will be created using Gradle. 
 
-To execute `Install`, use below command.
+To execute the script in `Install` mode, use below command.
 
 	./csw-json-xml-converter.sh install
 
@@ -261,7 +266,7 @@ In Update mode :
  - The Repo will be updated by using `git` commands.
  - The Jar file for this updated Repo will be created using Gradle.
 
-To execute `Update`, use below command.
+To execute the script in `Update` mode, use below command.
 
 	./csw-json-xml-converter.sh update
 
@@ -273,7 +278,7 @@ In Run mode :
  - The Last 2 Parameters were input and output path respectively
  - The Jar file will be executed using java commands.
 
-To execute `Run`, use below command.
+To execute the script in `Run` mode, use below command.
 
 	./csw-json-xml-converter.sh run /opt/json-files/sample-input.json /opt/xml-files/sample-output.json
 
@@ -286,3 +291,5 @@ The 3rd parameter me be a directory, where the new XML output file will be creat
 	./csw-json-xml-converter.sh run /opt/json-files/object-sample.json /opt/xml-files/
 
 For the above command, the output will be generated into `/opt/xml-files/object-sample.json`.
+
+##### Note : Provide absolute file paths only, error will be thrown otherwise, considering as invalid file path.
