@@ -5,8 +5,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.File;
 import java.nio.file.Paths;
+import java.util.Arrays;
 
 import org.apache.commons.lang3.StringUtils;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Order;
@@ -26,10 +28,13 @@ import lombok.extern.log4j.Log4j2;
  * @author praveen_kumar_nr
  */
 @Log4j2
-@TestMethodOrder(OrderAnnotation.class)
 class JsonToXmlConversionAppTest {
 
 	private static final String RESOURCE_DIR;
+
+	private static final String INVALID_FILE_PATH;
+
+	private static final String NEW_DIR_PATH;
 
 	static {
 		String rootDir = Paths.get(StringUtils.EMPTY)
@@ -39,9 +44,43 @@ class JsonToXmlConversionAppTest {
 			+ File.separator + "test"
 			+ File.separator + "resources")
 			.toAbsolutePath().toString();
+
+		INVALID_FILE_PATH = "invalid-file-path";
+
+		NEW_DIR_PATH = System.getProperty("user.home")
+			.concat(File.separator)
+			.concat("new-folder");
+	}
+
+	@BeforeEach
+	void executeBeforeEachTest() {
+		Arrays.asList(INVALID_FILE_PATH, NEW_DIR_PATH)
+			.stream().map(File::new)
+			.forEach(file -> deleteFileAndItsChildren(file));
+	}
+
+	boolean deleteFileAndItsChildren(File file) {
+		if (file.delete()) {
+			return true;
+		}
+		file = file.getAbsoluteFile();
+		if (!file.exists()) {
+			return true;
+		}
+		if (file.isDirectory()) {
+			for (File child : file.listFiles()) {
+				deleteFileAndItsChildren(child);
+			}
+		}
+		if (file.delete()) {
+			return true;
+		} else {
+			throw new RuntimeException("Unable to delete file : " + file);
+		}
 	}
 
 	@Nested
+	@TestMethodOrder(OrderAnnotation.class)
 	class InvalidArgumentsTest {
 
 		@Test
@@ -116,8 +155,8 @@ class JsonToXmlConversionAppTest {
 		@Order(041)
 		void testTwoInvalidFiles() throws Exception {
 			String[] args = new String[] {
-				"invalid-file-path",
-				"invalid-file-path"
+				INVALID_FILE_PATH,
+				INVALID_FILE_PATH
 			};
 			convertAndAssertThrows(args);
 		}
@@ -126,7 +165,7 @@ class JsonToXmlConversionAppTest {
 		@Order(042)
 		void testInvalidFilesAt0() throws Exception {
 			String[] args = new String[] {
-				"invalid-file-path",
+				INVALID_FILE_PATH,
 				getXmlFilePath("null")
 			};
 			convertAndAssertThrows(args);
@@ -137,7 +176,7 @@ class JsonToXmlConversionAppTest {
 		void testInvalidFilesAt1() throws Exception {
 			String[] args = new String[] {
 				getJsonFilePath("null"),
-				"invalid-file-path"
+				INVALID_FILE_PATH
 			};
 			convertAndAssertThrows(args);
 		}
@@ -175,6 +214,7 @@ class JsonToXmlConversionAppTest {
 	}
 
 	@Nested
+	@TestMethodOrder(OrderAnnotation.class)
 	class ValidArgumentsTest {
 
 		@Test
@@ -184,7 +224,7 @@ class JsonToXmlConversionAppTest {
 		}
 
 		@Test
-		@Order(001)
+		@Order(002)
 		void testArg0AsFileArg1AsDir() throws Exception {
 			String[] args = new String[] {
 				getJsonFilePath("object"),
@@ -193,9 +233,20 @@ class JsonToXmlConversionAppTest {
 			convertAndAssert(args, "object");
 		}
 
+		@Test
+		@Order(003)
+		void testArg0AsFileArg1AsExtDir() throws Exception {
+			String[] args = new String[] {
+				getJsonFilePath("object"),
+				NEW_DIR_PATH
+			};
+			convertAndAssert(args, "object");
+		}
+
 	}
 
 	@Nested
+	@TestMethodOrder(OrderAnnotation.class)
 	class NullTypesTest {
 
 		@Test
@@ -213,6 +264,7 @@ class JsonToXmlConversionAppTest {
 	}
 
 	@Nested
+	@TestMethodOrder(OrderAnnotation.class)
 	class NumericTypesTest {
 
 		@Test
@@ -266,6 +318,7 @@ class JsonToXmlConversionAppTest {
 	}
 
 	@Nested
+	@TestMethodOrder(OrderAnnotation.class)
 	class StringTypesTest {
 
 		@Test
@@ -289,6 +342,7 @@ class JsonToXmlConversionAppTest {
 	}
 
 	@Nested
+	@TestMethodOrder(OrderAnnotation.class)
 	class BooleanTypesTest {
 
 		@Test
@@ -312,6 +366,7 @@ class JsonToXmlConversionAppTest {
 	}
 
 	@Nested
+	@TestMethodOrder(OrderAnnotation.class)
 	class ArrayTypesTest {
 
 		@Test
@@ -353,6 +408,7 @@ class JsonToXmlConversionAppTest {
 	}
 
 	@Nested
+	@TestMethodOrder(OrderAnnotation.class)
 	class ObjectTypesTest {
 
 		@Test

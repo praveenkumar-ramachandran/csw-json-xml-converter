@@ -115,8 +115,20 @@ public class JsonToXmlConversionApp {
 	private static File getFile(String filePath, FileType fileType) {
 		File file = new File(filePath);
 		if (!file.exists() && !file.isDirectory() && !file.isFile()) {
+			if (!file.isAbsolute()) {
+				throw new IllegalArgumentException(
+					"Invalid file path : " + filePath);
+			}
+			try {
+				file.mkdirs();
+			} catch (Exception exception) {
+				throw new IllegalArgumentException(
+					"Invalid file path : " + filePath);
+			}
+		}
+		if (!file.exists()) {
 			throw new IllegalArgumentException(
-				"Invalid file path : " + filePath);
+				"File not exists with path : " + filePath);
 		}
 		if (FileType.JSON.equals(fileType) && !file.exists()) {
 			throw new IllegalArgumentException("File does not exists : " + filePath);
