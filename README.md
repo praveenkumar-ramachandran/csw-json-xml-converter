@@ -48,7 +48,9 @@ Refer Few of the conversion samples provided below.
 
 ##### <font color="green">XML  :</font>
 
-    <string>Hello World</string>
+```xml
+<string>Hello World</string>
+```
 
 #### `2.2 Nested String`
 ##### <font color="brown">JSON :</font>
@@ -60,10 +62,12 @@ Refer Few of the conversion samples provided below.
 
 ##### <font color="green">XML  :</font>
 
-    <object>
-	    <string name="firstName">John</string>
-	    <string name="lastName">Smith</string>
-    </object>
+```xml
+<object>
+  <string name="firstName">John</string>
+  <string name="lastName">Smith</string>
+</object>
+```
 
 #### `3.1 Single Boolean`
 ##### <font color="brown">JSON :</font>
@@ -72,7 +76,9 @@ Refer Few of the conversion samples provided below.
 
 ##### <font color="green">XML  :</font>
 
-    <boolean>true</boolean>
+```xml
+<boolean>true</boolean>
+```
 
 #### `3.2 Nested Boolean`
 ##### <font color="brown">JSON :</font>
@@ -86,8 +92,8 @@ Refer Few of the conversion samples provided below.
 
 ```xml
 <object>
-	<boolean name="isHuman">true</boolean>
-	<boolean name="isTall">false</boolean>
+  <boolean name="isHuman">true</boolean>
+  <boolean name="isTall">false</boolean>
 </object>
 ```
 
@@ -98,10 +104,11 @@ Refer Few of the conversion samples provided below.
 
 ##### <font color="green">XML  :</font>
 
-    <array>
-	    <number>1</number>
-	    <string>test</string>
-    </array>
+```xml
+<array>
+  <number>1</number>
+  <string>test</string>
+</array>
 
 #### `4.2 Nested Array`
 ##### <font color="brown">JSON :</font>
@@ -112,17 +119,19 @@ Refer Few of the conversion samples provided below.
 
 ##### <font color="green">XML  :</font>
 
-    <object>
-    	<array>
-	    	<number>0</number>
-	    	<number>1</number>
-	    	<number>1</number>
-	    	<number>2</number>
-	    	<number>3</number>
-	    	<string>fibs</string>
-	    	<boolean>true</boolean>
-    	</array>
-    </object>
+```xml
+<object>
+  <array>
+    <number>0</number>
+    <number>1</number>
+    <number>1</number>
+    <number>2</number>
+    <number>3</number>
+    <string>fibs</string>
+    <boolean>true</boolean>
+  </array>
+</object>
+```
 
 #### `5. Object`
 ##### <font color="brown">JSON :</font>
@@ -144,20 +153,22 @@ Refer Few of the conversion samples provided below.
 
 ##### <font color="green">XML  :</font>
 
-    <object>
-    	<object name="profile">
-    		<string name="firstName">John</string>
-    		<string name="lastName">Smith</string>
-    		<number name="age">20</number>
-    		<array name="friends">
-    			<string>Joe</string>
-    			<object>
-    				<string name="firstName">Sue</string>
-    				<string name="lastName">Jones</string>
-    			</object>
-    		</array>
-    	</object>
-    </object>
+```xml
+<object>
+  <object name="profile">
+    <string name="firstName">John</string>
+    <string name="lastName">Smith</string>
+    <number name="age">20</number>
+    <array name="friends">
+      <string>Joe</string>
+      <object>
+        <string name="firstName">Sue</string>
+        <string name="lastName">Jones</string>
+      </object>
+    </array>
+  </object>
+</object>
+```
 
 #### `6.1 Single null`
 ##### <font color="brown">JSON :</font>
