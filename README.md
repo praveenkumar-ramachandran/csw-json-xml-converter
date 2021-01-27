@@ -178,7 +178,9 @@ Refer Few of the conversion samples provided below.
 
 ##### <font color="green">XML  :</font>
 
-    <null/>
+```xml
+<null/>
+```
 
 #### `6.2 Nested null`
 ##### <font color="brown">JSON :</font>
@@ -189,9 +191,11 @@ Refer Few of the conversion samples provided below.
 
 ##### <font color="green">XML  :</font>
 
-    <object>
-	    <null name="computer_name">true />
-    </object>
+```xml
+<object>
+  <null name="computer_name">true />
+</object>
+```
 
 ## `How to Run [Note : Supports only on linux machines]`
 
