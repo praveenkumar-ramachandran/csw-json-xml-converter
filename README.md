@@ -34,10 +34,12 @@ Refer Few of the conversion samples provided below.
 
 ##### <font color="green">XML  :</font>
 
-    <object>
-	    <number  name="cars">2</number>
-	    <number  name="trucks">10</number>
-    </object>
+```xml
+<object>
+	<number  name="cars">2</number>
+	<number  name="trucks">10</number>
+</object>
+```
 
 #### `2.1 Single String`
 ##### <font color="brown">JSON :</font>
@@ -82,10 +84,12 @@ Refer Few of the conversion samples provided below.
 
 ##### <font color="green">XML  :</font>
 
-    <object>
-	    <boolean name="isHuman">true</boolean>
-	    <boolean name="isTall">false</boolean>
-    </object>
+```xml
+<object>
+	<boolean name="isHuman">true</boolean>
+	<boolean name="isTall">false</boolean>
+</object>
+```
 
 #### `4.1 Single Array`
 ##### <font color="brown">JSON :</font>
