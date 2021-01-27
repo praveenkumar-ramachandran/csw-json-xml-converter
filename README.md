@@ -36,8 +36,8 @@ Refer Few of the conversion samples provided below.
 
 ```xml
 <object>
-	<number  name="cars">2</number>
-	<number  name="trucks">10</number>
+  <number  name="cars">2</number>
+  <number  name="trucks">10</number>
 </object>
 ```
 
