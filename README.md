@@ -1,6 +1,4 @@
-
-
-#`csw-json-xml-converter`
+# `csw-json-xml-converter`
 Convert's JSON data into XML data with the following constrains.
 JSON supports the following types. 
 
@@ -16,112 +14,128 @@ Only JSON objects and arrays are supported as top level values.
 Refer Few of the conversion samples provided below. 
 
 #### `1.1 Single Number`
-`JSON :`
+##### <font color="brown">JSON :</font>
 
     -5
 
-`XML  :`
+##### <font color="green">XML  :</font>
 
-    <number>-5</number>
+```xml
+<number>-5</number>
+```
 
 #### `1.2 Nested Numbers`
-`JSON :`
+##### <font color="brown">JSON :</font>
 
     {
 		"cars": 2,
 		"trucks": 10
 	}
 
-`XML  :`
+##### <font color="green">XML  :</font>
 
-    <object>
-	    <number  name="cars">2</number>
-	    <number  name="trucks">10</number>
-    </object>
+```xml
+<object>
+  <number  name="cars">2</number>
+  <number  name="trucks">10</number>
+</object>
+```
 
 #### `2.1 Single String`
-`JSON :`
+##### <font color="brown">JSON :</font>
 
     "Hello World"
 
-`XML  :`
+##### <font color="green">XML  :</font>
 
-    <string>Hello World</string>
+```xml
+<string>Hello World</string>
+```
 
 #### `2.2 Nested String`
-`JSON :`
+##### <font color="brown">JSON :</font>
 
     {
 		"firstName": "John",
 		"lastName": "Smith"
 	}
 
-`XML  :`
+##### <font color="green">XML  :</font>
 
-    <object>
-	    <string name="firstName">John</string>
-	    <string name="lastName">Smith</string>
-    </object>
+```xml
+<object>
+  <string name="firstName">John</string>
+  <string name="lastName">Smith</string>
+</object>
+```
 
 #### `3.1 Single Boolean`
-`JSON :`
+##### <font color="brown">JSON :</font>
 
     true
 
-`XML  :`
+##### <font color="green">XML  :</font>
 
-    <boolean>true</boolean>
+```xml
+<boolean>true</boolean>
+```
 
 #### `3.2 Nested Boolean`
-`JSON :`
+##### <font color="brown">JSON :</font>
 
     {
 		"isHuman": true,
 		"isTall": false
 	}
 
-`XML  :`
+##### <font color="green">XML  :</font>
 
-    <object>
-	    <boolean name="isHuman">true</boolean>
-	    <boolean name="isTall">false</boolean>
-    </object>
+```xml
+<object>
+  <boolean name="isHuman">true</boolean>
+  <boolean name="isTall">false</boolean>
+</object>
+```
 
 #### `4.1 Single Array`
-`JSON :`
+##### <font color="brown">JSON :</font>
 
     [1, "test"]
 
-`XML  :`
+##### <font color="green">XML  :</font>
 
-    <array>
-	    <number>1</number>
-	    <string>test</string>
-    </array>
+```xml
+<array>
+  <number>1</number>
+  <string>test</string>
+</array>
+```
 
 #### `4.2 Nested Array`
-`JSON :`
+##### <font color="brown">JSON :</font>
 
     {
 		"fibs": [0,1,1,2,3,"fibs",true]
 	}
 
-`XML  :`
+##### <font color="green">XML  :</font>
 
-    <object>
-    	<array>
-	    	<number>0</number>
-	    	<number>1</number>
-	    	<number>1</number>
-	    	<number>2</number>
-	    	<number>3</number>
-	    	<string>fibs</string>
-	    	<boolean>true</boolean>
-    	</array>
-    </object>
+```xml
+<object>
+  <array>
+    <number>0</number>
+    <number>1</number>
+    <number>1</number>
+    <number>2</number>
+    <number>3</number>
+    <string>fibs</string>
+    <boolean>true</boolean>
+  </array>
+</object>
+```
 
 #### `5. Object`
-`JSON :`
+##### <font color="brown">JSON :</font>
 
     {
 		"profile": {
@@ -138,44 +152,50 @@ Refer Few of the conversion samples provided below.
 		}
 	}
 
-`XML  :`
+##### <font color="green">XML  :</font>
 
-    <object>
-    	<object name="profile">
-    		<string name="firstName">John</string>
-    		<string name="lastName">Smith</string>
-    		<number name="age">20</number>
-    		<array name="friends">
-    			<string>Joe</string>
-    			<object>
-    				<string name="firstName">Sue</string>
-    				<string name="lastName">Jones</string>
-    			</object>
-    		</array>
-    	</object>
-    </object>
+```xml
+<object>
+  <object name="profile">
+    <string name="firstName">John</string>
+    <string name="lastName">Smith</string>
+    <number name="age">20</number>
+    <array name="friends">
+      <string>Joe</string>
+      <object>
+        <string name="firstName">Sue</string>
+        <string name="lastName">Jones</string>
+      </object>
+    </array>
+  </object>
+</object>
+```
 
 #### `6.1 Single null`
-`JSON :`
+##### <font color="brown">JSON :</font>
 
     null
 
-`XML  :`
+##### <font color="green">XML  :</font>
 
-    <null/>
+```xml
+<null/>
+```
 
 #### `6.2 Nested null`
-`JSON :`
+##### <font color="brown">JSON :</font>
 
     {
 		"computer_name": null
 	}
 
-`XML  :`
+##### <font color="green">XML  :</font>
 
-    <object>
-	    <null name="computer_name">true />
-    </object>
+```xml
+<object>
+  <null name="computer_name">true />
+</object>
+```
 
 ## `How to Run [Note : Supports only on linux machines]`
 

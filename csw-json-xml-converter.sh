@@ -184,8 +184,15 @@ create_work_dir() {
 	WORK_DIRECTORY="$_WORK_DIR"
 	DATE_TIME="$(echo $(date '+%Y-%m-%d-%H-%M-%S'))"
 	BACKUP_DIRECTORY="$_WORK_DIR-backup-$DATE_TIME"
-	[[ "$_MODE" == "$_MODE_INSTALL" ]] && [[ -d "$WORK_DIRECTORY" ]] && mv "$WORK_DIRECTORY" "$BACKUP_DIRECTORY"
-	run_cmd_and_exit_on_error "mkdir $WORK_DIRECTORY"
+	if [[ "$_MODE" == "$_MODE_INSTALL" ]]; then
+		if [[ -d "$WORK_DIRECTORY" ]]; then
+			log_info "Work Directory exists already, creating backup : $BACKUP_DIRECTORY"
+			run_cmd_and_exit_on_error "mv $WORK_DIRECTORY $BACKUP_DIRECTORY"
+		else
+			log_info "Work Directory not exists, creating : $WORK_DIRECTORY"
+			run_cmd_and_exit_on_error "mkdir $WORK_DIRECTORY"
+		fi
+	fi
 	if [[ -d "$WORK_DIRECTORY" ]]; then
 		# parameter is empty, so skip folder rename process
 		:
