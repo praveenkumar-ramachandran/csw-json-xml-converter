@@ -270,7 +270,7 @@ To execute the script in `Update` mode, use below command.
 
 	./csw-json-xml-converter.sh update
 
-##### `2. Run Mode`
+##### `3. Run Mode`
 
 Once Install mode succeeds, we can trigger the Run mode.
 In Run mode :
