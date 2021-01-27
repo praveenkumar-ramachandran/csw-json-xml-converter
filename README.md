@@ -109,6 +109,7 @@ Refer Few of the conversion samples provided below.
   <number>1</number>
   <string>test</string>
 </array>
+```
 
 #### `4.2 Nested Array`
 ##### <font color="brown">JSON :</font>
