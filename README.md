@@ -16,7 +16,9 @@ Refer Few of the conversion samples provided below.
 #### `1.1 Single Number`
 ##### <font color="brown">JSON :</font>
 
-    -5
+```json
+-5
+```
 
 ##### <font color="green">XML  :</font>
 
@@ -27,10 +29,12 @@ Refer Few of the conversion samples provided below.
 #### `1.2 Nested Numbers`
 ##### <font color="brown">JSON :</font>
 
-    {
-		"cars": 2,
-		"trucks": 10
-	}
+```json
+{
+  "cars": 2,
+  "trucks": 10
+}
+```
 
 ##### <font color="green">XML  :</font>
 
@@ -44,7 +48,9 @@ Refer Few of the conversion samples provided below.
 #### `2.1 Single String`
 ##### <font color="brown">JSON :</font>
 
-    "Hello World"
+```json
+"Hello World"
+```
 
 ##### <font color="green">XML  :</font>
 
@@ -55,10 +61,12 @@ Refer Few of the conversion samples provided below.
 #### `2.2 Nested String`
 ##### <font color="brown">JSON :</font>
 
-    {
-		"firstName": "John",
-		"lastName": "Smith"
-	}
+```json
+{
+  "firstName": "John",
+  "lastName": "Smith"
+}
+```
 
 ##### <font color="green">XML  :</font>
 
@@ -72,7 +80,9 @@ Refer Few of the conversion samples provided below.
 #### `3.1 Single Boolean`
 ##### <font color="brown">JSON :</font>
 
-    true
+```json
+true
+```
 
 ##### <font color="green">XML  :</font>
 
@@ -83,10 +93,12 @@ Refer Few of the conversion samples provided below.
 #### `3.2 Nested Boolean`
 ##### <font color="brown">JSON :</font>
 
-    {
-		"isHuman": true,
-		"isTall": false
-	}
+```json
+{
+  "isHuman": true,
+  "isTall": false
+}
+```
 
 ##### <font color="green">XML  :</font>
 
@@ -100,7 +112,9 @@ Refer Few of the conversion samples provided below.
 #### `4.1 Single Array`
 ##### <font color="brown">JSON :</font>
 
-    [1, "test"]
+```json
+[1, "test"]
+```
 
 ##### <font color="green">XML  :</font>
 
@@ -114,9 +128,11 @@ Refer Few of the conversion samples provided below.
 #### `4.2 Nested Array`
 ##### <font color="brown">JSON :</font>
 
-    {
-		"fibs": [0,1,1,2,3,"fibs",true]
-	}
+```json
+{
+  "fibs": [0,1,1,2,3,"fibs",true]
+}
+```
 
 ##### <font color="green">XML  :</font>
 
@@ -137,20 +153,22 @@ Refer Few of the conversion samples provided below.
 #### `5. Object`
 ##### <font color="brown">JSON :</font>
 
-    {
-		"profile": {
-			"firstName": "John",
-			"lastName": "Smith",
-			"age": 20,
-			"friends": [
-				"Joe",
-				{
-					"firstName": "Sue",
-					"lastName": "Jones"
-				}
-			]
-		}
-	}
+```json
+{
+  "profile": {
+    "firstName": "John",
+    "lastName": "Smith",
+    "age": 20,
+    "friends": [
+  	  "Joe",
+  	  {
+  	    "firstName": "Sue",
+  	    "lastName": "Jones"
+  	  }
+    ]
+  }
+}
+```
 
 ##### <font color="green">XML  :</font>
 
@@ -174,7 +192,9 @@ Refer Few of the conversion samples provided below.
 #### `6.1 Single null`
 ##### <font color="brown">JSON :</font>
 
-    null
+```json
+null
+```
 
 ##### <font color="green">XML  :</font>
 
@@ -185,9 +205,11 @@ Refer Few of the conversion samples provided below.
 #### `6.2 Nested null`
 ##### <font color="brown">JSON :</font>
 
-    {
-		"computer_name": null
-	}
+```json
+{
+  "computer_name": null
+}
+```
 
 ##### <font color="green">XML  :</font>
 
@@ -197,7 +219,9 @@ Refer Few of the conversion samples provided below.
 </object>
 ```
 
-## `How to Run [Note : Supports only on linux machines]`
+## `How to Run` 
+
+###### `[Note : Supports only on linux machines]`
 
 #### `Step 1 :`
 
@@ -211,12 +235,15 @@ Change the file to executable. To make it executable, use below command
 
 #### `Step 3 :`
 
-The `csw-json-xml-converter.sh` shell script accepts 3 different types of arguments as mentioned below :
+The `csw-json-xml-converter.sh` shell script executes in 3 modes.
 
  1. Install
  2. Update
  3. Run
- 
+
+The 1st parameter for this shell file defines the execution mode and is case in-sensitive.
+The 1st parameter supports only above 3 values.
+
 ##### `1. Install Mode`
 
 In Install mode :
@@ -225,13 +252,9 @@ In Install mode :
  - The Repo is cloned from Github.
  - The Jar file for this Repo will be created using Gradle. 
 
-To execute `Install`, use below command.
+To execute the script in `Install` mode, use below command.
 
 	./csw-json-xml-converter.sh install
-
-It's the default mode. So you can execute without any arguments as below.
-
-	./csw-json-xml-converter.sh
 
 When Install mode is triggered again, the existing setup folder will be moved to a backup folder and a new setup will be done.
 
@@ -243,11 +266,11 @@ In Update mode :
  - The Repo will be updated by using `git` commands.
  - The Jar file for this updated Repo will be created using Gradle.
 
-To execute `Update`, use below command.
+To execute the script in `Update` mode, use below command.
 
 	./csw-json-xml-converter.sh update
 
-##### `2. Run Mode`
+##### `3. Run Mode`
 
 Once Install mode succeeds, we can trigger the Run mode.
 In Run mode :
@@ -255,7 +278,7 @@ In Run mode :
  - The Last 2 Parameters were input and output path respectively
  - The Jar file will be executed using java commands.
 
-To execute `Run`, use below command.
+To execute the script in `Run` mode, use below command.
 
 	./csw-json-xml-converter.sh run /opt/json-files/sample-input.json /opt/xml-files/sample-output.json
 
@@ -268,3 +291,5 @@ The 3rd parameter me be a directory, where the new XML output file will be creat
 	./csw-json-xml-converter.sh run /opt/json-files/object-sample.json /opt/xml-files/
 
 For the above command, the output will be generated into `/opt/xml-files/object-sample.json`.
+
+##### Note : Provide absolute file paths only, error will be thrown otherwise, considering as invalid file path.
